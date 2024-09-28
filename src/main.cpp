@@ -1,6 +1,11 @@
 #include "main.h"
 
 stormlib::aRGB strand(1, 50);
+stormlib::selector selector1(1, "6Ring");
+
+void start() {
+	strand.breathe(0x00FFFF);
+}
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -10,7 +15,8 @@ stormlib::aRGB strand(1, 50);
  */
 void initialize() {
 	pros::lcd::initialize();
-	selector_initialize();
+	selector1.initialize();
+	selector1.registerAuton(stormlib::selector::E_RED_LEFT_1, start);
 	strand.init();
 }
 
@@ -44,42 +50,6 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	if (!isSkills) {
-		if (isRed) {
-			if (isLeft) {
-				if (currentAuton == 1) {}; // Red Left AWP
-				if (currentAuton == 2) {}; // Red Left Safe
-				if (currentAuton == 3) {}; // Red Left Rush
-				if (currentAuton == 4) {}; // Red Left Misc
-			}
-			else {
-				if (currentAuton == 1) {}; // Red Right AWP
-				if (currentAuton == 2) {}; // Red Right Safe
-				if (currentAuton == 3) {}; // Red Right Rush
-				if (currentAuton == 4) {}; // Red Right Misc
-			}
-		}
-		else {
-			if (isLeft) {
-				if (currentAuton == 1) {}; // Blue Left AWP
-				if (currentAuton == 2) {}; // Blue Left Safe
-				if (currentAuton == 3) {}; // Blue Left Rush
-				if (currentAuton == 4) {}; // Blue Left Misc
-			}
-			else {
-				if (currentAuton == 1) {}; // Blue Right AWP
-				if (currentAuton == 2) {}; // Blue Right Safe
-				if (currentAuton == 3) {}; // Blue Right Rush
-				if (currentAuton == 4) {}; // Blue Right Misc
-			}
-		}
-	}
-	else {
-		if (currentAuton == -1) {}; // Skills 1
-		if (currentAuton == -2) {}; // Skills 2
-		if (currentAuton == -3) {}; // Skills 3
-		if (currentAuton == -4) {}; // Skills 4
-	}
 }
 
 /**
