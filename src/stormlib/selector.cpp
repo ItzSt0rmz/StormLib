@@ -3,78 +3,85 @@
 
 using namespace pros;
 
-lv_obj_t * vertLine;
-lv_obj_t * horzLine;
+static lv_obj_t * vertLine;
+static lv_obj_t * horzLine;
 
-lv_obj_t * teamScreen;
-lv_obj_t * redButton;
-lv_obj_t * redButtonLabel;
-lv_obj_t * blueButton;
-lv_obj_t * blueButtonLabel;
+static lv_obj_t * teamScreen;
+static lv_obj_t * redButton;
+static lv_obj_t * redButtonLabel;
+static lv_obj_t * blueButton;
+static lv_obj_t * blueButtonLabel;
 
-lv_obj_t * sideScreen;
-lv_obj_t * leftButton;
-lv_obj_t * leftButtonLabel;
-lv_obj_t * rightButton;
-lv_obj_t * rightButtonLabel;
+static lv_obj_t * sideScreen;
+static lv_obj_t * leftButton;
+static lv_obj_t * leftButtonLabel;
+static lv_obj_t * rightButton;
+static lv_obj_t * rightButtonLabel;
 
-lv_obj_t * optionScreen;
-lv_obj_t * option1Button;
-lv_obj_t * option1ButtonLabel;
-lv_obj_t * option2Button;
-lv_obj_t * option2ButtonLabel;
-lv_obj_t * option3Button;
-lv_obj_t * option3ButtonLabel;
-lv_obj_t * option4Button;
-lv_obj_t * option4ButtonLabel;
+static lv_obj_t * optionScreen;
+static lv_obj_t * option1Button;
+static lv_obj_t * option1ButtonLabel;
+static lv_obj_t * option2Button;
+static lv_obj_t * option2ButtonLabel;
+static lv_obj_t * option3Button;
+static lv_obj_t * option3ButtonLabel;
+static lv_obj_t * option4Button;
+static lv_obj_t * option4ButtonLabel;
 
-lv_obj_t * skillsScreen;
-lv_obj_t * skills1Button;
-lv_obj_t * skills1ButtonLabel;
-lv_obj_t * skills2Button;
-lv_obj_t * skills2ButtonLabel;
-lv_obj_t * skills3Button;
-lv_obj_t * skills3ButtonLabel;
-lv_obj_t * skills4Button;
-lv_obj_t * skills4ButtonLabel;
+static lv_obj_t * skillsScreen;
+static lv_obj_t * skills1Button;
+static lv_obj_t * skills1ButtonLabel;
+static lv_obj_t * skills2Button;
+static lv_obj_t * skills2ButtonLabel;
+static lv_obj_t * skills3Button;
+static lv_obj_t * skills3ButtonLabel;
+static lv_obj_t * skills4Button;
+static lv_obj_t * skills4ButtonLabel;
 
-lv_obj_t * backButton;
-lv_obj_t * backButtonLabel;
+static lv_obj_t * backButton;
+static lv_obj_t * backButtonLabel;
 
-lv_obj_t * exitButton;
-lv_obj_t * exitButtonLabel;
-lv_obj_t * autonsButton;
-lv_obj_t * autonsButtonLabel;
-lv_obj_t * skillsButton;
-lv_obj_t * skillsButtonLabel;
+static lv_obj_t * exitButton;
+static lv_obj_t * exitButtonLabel;
+static lv_obj_t * autonsButton;
+static lv_obj_t * autonsButtonLabel;
+static lv_obj_t * skillsButton;
+static lv_obj_t * skillsButtonLabel;
 
-lv_obj_t * saveScreen;
-lv_obj_t * saveExit;
-lv_obj_t * saveDisp;
-lv_obj_t * teamNum;
+static lv_obj_t * saveScreen;
+static lv_obj_t * saveExit;
+static lv_obj_t * saveDisp;
+static lv_obj_t * teamNum;
 
-lv_obj_t * startScreen;
+static lv_obj_t * startScreen;
 
-lv_style_t myButtonStyleREL; //relesed style
-lv_style_t myButtonStylePR; //pressed style
-lv_style_t redStyle;
-lv_style_t blueStyle;
-lv_style_t selectedStyle;
-lv_style_t backStyle;
-lv_style_t menuStyle1;
-lv_style_t menuStyle2;
-lv_style_t style_btn_rel;
-lv_style_t style_btn_pr;
-lv_style_t style_bg;
-lv_style_t invisibleStyle;
-lv_style_t saveDispStyle;
-lv_style_t teamNumStyle;
+static lv_style_t myButtonStyleREL; // released style
+static lv_style_t myButtonStylePR;  // pressed style
+static lv_style_t redStyle;
+static lv_style_t blueStyle;
+static lv_style_t selectedStyle;
+static lv_style_t backStyle;
+static lv_style_t menuStyle1;
+static lv_style_t menuStyle2;
+static lv_style_t style_btn_rel;
+static lv_style_t style_btn_pr;
+static lv_style_t style_bg;
+static lv_style_t invisibleStyle;
+static lv_style_t saveDispStyle;
+static lv_style_t teamNumStyle;
 
-bool isRed, isLeft, isSkills;
-int currentScreen = 1;
-int currentAuton = 2;
 
-void resetButtonHighlights() 
+stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
+    this->defaultAuton = defaultAuton;
+    this->slot1Name = slot1Name;
+    this->slot2Name = slot2Name;
+    this->slot3Name = slot3Name;
+    this->slot4Name = slot4Name;
+
+    this->initialize();
+}
+
+void stormlib::selector::resetButtonHighlights() 
 {
     lv_btn_set_style(option1Button, LV_BTN_STYLE_REL, &myButtonStyleREL);
     lv_btn_set_style(option2Button, LV_BTN_STYLE_REL, &myButtonStyleREL);
@@ -86,137 +93,124 @@ void resetButtonHighlights()
     lv_btn_set_style(skills4Button, LV_BTN_STYLE_REL, &myButtonStyleREL);
 }
 
-static lv_res_t exitMenu_btn_click_action(lv_obj_t * btn)
+ lv_res_t stormlib::selector::exitMenu_btn_click_action(lv_obj_t * btn)
 {
     lv_scr_load(saveScreen);
     return LV_RES_OK;
 }
 
-static lv_res_t autonsMenu_btn_click_action(lv_obj_t * btn)
-{
-	lv_scr_load(teamScreen);
-    return LV_RES_OK;
-}
-
-static lv_res_t skillsMenu_btn_click_action(lv_obj_t * btn)
-{
-	lv_scr_load(skillsScreen);
-    return LV_RES_OK;
-}
-
-static lv_res_t red_btn_click_action(lv_obj_t * btn)
-{
-	isRed = true;
-	lv_scr_load(sideScreen);
-    return LV_RES_OK;
-}
-
-static lv_res_t blue_btn_click_action(lv_obj_t * btn)
-{
-	isRed = false;
-	lv_scr_load(sideScreen);
-    return LV_RES_OK;
-}
-
-static lv_res_t left_btn_click_action(lv_obj_t * btn)
-{
-	isLeft = true;
-	lv_scr_load(optionScreen);
-    return LV_RES_OK;
-}
-
-static lv_res_t right_btn_click_action(lv_obj_t * btn)
-{
-	isLeft = false;
-	lv_scr_load(optionScreen);
-    return LV_RES_OK;
-}
-
-static lv_res_t opt1_btn_click_action(lv_obj_t * btn)
-{
-	currentAuton = 1;
-    resetButtonHighlights();
-    lv_btn_set_style(option1Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
-}
-
-static lv_res_t opt2_btn_click_action(lv_obj_t * btn)
-{
-	currentAuton = 2;
-    resetButtonHighlights();
-    lv_btn_set_style(option2Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
-}
-
-static lv_res_t opt3_btn_click_action(lv_obj_t * btn)
-{
-	currentAuton = 3;
-    resetButtonHighlights();
-    lv_btn_set_style(option3Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
-}
-
-static lv_res_t opt4_btn_click_action(lv_obj_t * btn)
-{
-	currentAuton = 4;
-    resetButtonHighlights();
-    lv_btn_set_style(option4Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
-}
-
-static lv_res_t skl1_btn_click_action(lv_obj_t * btn)
-{
-	currentAuton = -1;
-    resetButtonHighlights();
-    lv_btn_set_style(skills1Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
-}
-
-static lv_res_t skl2_btn_click_action(lv_obj_t * btn)
-{
-	currentAuton = -2;
-    resetButtonHighlights();
-    lv_btn_set_style(skills2Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
-}
-
-static lv_res_t skl3_btn_click_action(lv_obj_t * btn)
-{
-	currentAuton = -3;
-    resetButtonHighlights();
-    lv_btn_set_style(skills3Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
-}
-
-static lv_res_t skl4_btn_click_action(lv_obj_t * btn)
-{
-	currentAuton = -4;
-    resetButtonHighlights();
-    lv_btn_set_style(skills4Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
-}
-
-static lv_res_t back_button_click_action1(lv_obj_t * btn)
+lv_res_t stormlib::selector::autonsMenu_btn_click_action(lv_obj_t * btn)
 {
     lv_scr_load(teamScreen);
     return LV_RES_OK;
 }
 
-static lv_res_t back_button_click_action2(lv_obj_t * btn)
+lv_res_t stormlib::selector::skillsMenu_btn_click_action(lv_obj_t * btn)
+{
+    lv_scr_load(skillsScreen);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::red_btn_click_action(lv_obj_t * btn)
+{
+    lv_scr_load(sideScreen);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::blue_btn_click_action(lv_obj_t * btn)
+{
+    lv_scr_load(sideScreen);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::left_btn_click_action(lv_obj_t * btn)
+{
+    lv_scr_load(optionScreen);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::right_btn_click_action(lv_obj_t * btn)
+{
+    lv_scr_load(optionScreen);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::opt1_btn_click_action(lv_obj_t * btn)
+{
+    resetButtonHighlights();
+    lv_btn_set_style(option1Button, LV_BTN_STYLE_REL, &selectedStyle);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::opt2_btn_click_action(lv_obj_t * btn)
+{
+    resetButtonHighlights();
+    lv_btn_set_style(option2Button, LV_BTN_STYLE_REL, &selectedStyle);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::opt3_btn_click_action(lv_obj_t * btn)
+{
+    resetButtonHighlights();
+    lv_btn_set_style(option3Button, LV_BTN_STYLE_REL, &selectedStyle);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::opt4_btn_click_action(lv_obj_t * btn)
+{
+    resetButtonHighlights();
+    lv_btn_set_style(option4Button, LV_BTN_STYLE_REL, &selectedStyle);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::skl1_btn_click_action(lv_obj_t * btn)
+{
+    resetButtonHighlights();
+    lv_btn_set_style(skills1Button, LV_BTN_STYLE_REL, &selectedStyle);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::skl2_btn_click_action(lv_obj_t * btn)
+{
+    resetButtonHighlights();
+    lv_btn_set_style(skills2Button, LV_BTN_STYLE_REL, &selectedStyle);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::skl3_btn_click_action(lv_obj_t * btn)
+{
+    resetButtonHighlights();
+    lv_btn_set_style(skills3Button, LV_BTN_STYLE_REL, &selectedStyle);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::skl4_btn_click_action(lv_obj_t * btn)
+{
+    resetButtonHighlights();
+    lv_btn_set_style(skills4Button, LV_BTN_STYLE_REL, &selectedStyle);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::back_button_click_action1(lv_obj_t * btn)
+{
+    lv_scr_load(teamScreen);
+    return LV_RES_OK;
+}
+
+lv_res_t stormlib::selector::back_button_click_action2(lv_obj_t * btn)
 {
     lv_scr_load(sideScreen);
     resetButtonHighlights();
     return LV_RES_OK;
 }
 
-static lv_res_t mbox_apply_action(lv_obj_t * mbox, const char * txt)
+lv_res_t stormlib::selector::mbox_apply_action(lv_obj_t * mbox, const char * txt)
 {
     lv_scr_load(teamScreen);
-
     return LV_RES_OK; /*Return OK if the message box is not deleted*/
 }
 
-void menuSetup() 
+void stormlib::selector::menuSetup() 
 {
     exitButton = lv_btn_create(lv_scr_act(), NULL); //create button, lv_scr_act() is deafult screen object
     lv_btn_set_action(exitButton, LV_BTN_ACTION_CLICK, exitMenu_btn_click_action); //set function to be called on button click
@@ -249,7 +243,7 @@ void menuSetup()
     lv_label_set_text(skillsButtonLabel, "Skills"); //sets label text
 }
 
-void selector_initialize() 
+void stormlib::selector::initialize() 
 {
     lv_style_copy(&myButtonStyleREL, &lv_style_plain);
     myButtonStyleREL.body.main_color = LV_COLOR_BLUE;
@@ -418,7 +412,7 @@ void selector_initialize()
     lv_obj_align(option1Button, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 40); //set the position to top mid
 
     option1ButtonLabel = lv_label_create(option1Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(option1ButtonLabel, "AWP"); //sets label text
+    lv_label_set_text(option1ButtonLabel, slot1Name); //sets label text
 
 	option2Button = lv_btn_create(optionScreen, NULL); //create button, lv_scr_act() is deafult screen object
     lv_btn_set_action(option2Button, LV_BTN_ACTION_CLICK, opt2_btn_click_action); //set function to be called on button click
@@ -428,7 +422,7 @@ void selector_initialize()
     lv_obj_align(option2Button, NULL, LV_ALIGN_IN_TOP_LEFT, 240, 40); //set the position to top mid
 
     option2ButtonLabel = lv_label_create(option2Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(option2ButtonLabel, "Safe"); //sets label text
+    lv_label_set_text(option2ButtonLabel, slot2Name); //sets label text
 
 	option3Button = lv_btn_create(optionScreen, NULL); //create button, lv_scr_act() is deafult screen object
     lv_btn_set_action(option3Button, LV_BTN_ACTION_CLICK, opt3_btn_click_action); //set function to be called on button click
@@ -438,7 +432,7 @@ void selector_initialize()
     lv_obj_align(option3Button, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 140); //set the position to top mid
 
     option3ButtonLabel = lv_label_create(option3Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(option3ButtonLabel, "Rush"); //sets label text
+    lv_label_set_text(option3ButtonLabel, slot3Name); //sets label text
 
 	option4Button = lv_btn_create(optionScreen, NULL); //create button, lv_scr_act() is deafult screen object
     lv_btn_set_action(option4Button, LV_BTN_ACTION_CLICK, opt4_btn_click_action); //set function to be called on button click
@@ -448,7 +442,7 @@ void selector_initialize()
     lv_obj_align(option4Button, NULL, LV_ALIGN_IN_TOP_LEFT, 240, 140); //set the position to top mid
 
     option4ButtonLabel = lv_label_create(option4Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(option4ButtonLabel, "Misc"); //sets label text
+    lv_label_set_text(option4ButtonLabel, slot4Name); //sets label text
 
     backButton = lv_btn_create(lv_scr_act(), NULL); //create button, lv_scr_act() is deafult screen object
     lv_btn_set_action(backButton, LV_BTN_ACTION_CLICK, back_button_click_action2); //set function to be called on button click
@@ -539,4 +533,5 @@ void selector_initialize()
     lv_obj_set_width(mbox1, 250);
     lv_obj_align(mbox1, NULL, LV_ALIGN_CENTER, 0, 0); 
 
+    lv_scr_load(teamScreen);
 }
