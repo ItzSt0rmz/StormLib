@@ -70,15 +70,20 @@ static lv_style_t invisibleStyle;
 static lv_style_t saveDispStyle;
 static lv_style_t teamNumStyle;
 
+bool isRed = true;
+bool isLeft = true;
+bool isSkills = false;
+int autonSlot = 1;
 
-stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
+
+stormlib::selector::selector(int defaultAuton, bool initializeNow = true, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
     this->defaultAuton = defaultAuton;
     this->slot1Name = slot1Name;
     this->slot2Name = slot2Name;
     this->slot3Name = slot3Name;
     this->slot4Name = slot4Name;
 
-    this->initialize();
+    if (initializeNow)  this->initialize();
 }
 
 void stormlib::selector::resetButtonHighlights() 
@@ -113,30 +118,35 @@ lv_res_t stormlib::selector::skillsMenu_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::red_btn_click_action(lv_obj_t * btn)
 {
+    isRed = true;
     lv_scr_load(sideScreen);
     return LV_RES_OK;
 }
 
 lv_res_t stormlib::selector::blue_btn_click_action(lv_obj_t * btn)
 {
+    isRed = false;
     lv_scr_load(sideScreen);
     return LV_RES_OK;
 }
 
 lv_res_t stormlib::selector::left_btn_click_action(lv_obj_t * btn)
 {
+    isLeft = true;
     lv_scr_load(optionScreen);
     return LV_RES_OK;
 }
 
 lv_res_t stormlib::selector::right_btn_click_action(lv_obj_t * btn)
 {
+    isLeft = false;
     lv_scr_load(optionScreen);
     return LV_RES_OK;
 }
 
 lv_res_t stormlib::selector::opt1_btn_click_action(lv_obj_t * btn)
 {
+    autonSlot = 1;
     resetButtonHighlights();
     lv_btn_set_style(option1Button, LV_BTN_STYLE_REL, &selectedStyle);
     return LV_RES_OK;
@@ -144,6 +154,7 @@ lv_res_t stormlib::selector::opt1_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::opt2_btn_click_action(lv_obj_t * btn)
 {
+    autonSlot = 2;
     resetButtonHighlights();
     lv_btn_set_style(option2Button, LV_BTN_STYLE_REL, &selectedStyle);
     return LV_RES_OK;
@@ -151,6 +162,7 @@ lv_res_t stormlib::selector::opt2_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::opt3_btn_click_action(lv_obj_t * btn)
 {
+    autonSlot = 3;
     resetButtonHighlights();
     lv_btn_set_style(option3Button, LV_BTN_STYLE_REL, &selectedStyle);
     return LV_RES_OK;
@@ -158,6 +170,7 @@ lv_res_t stormlib::selector::opt3_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::opt4_btn_click_action(lv_obj_t * btn)
 {
+    autonSlot = 4;
     resetButtonHighlights();
     lv_btn_set_style(option4Button, LV_BTN_STYLE_REL, &selectedStyle);
     return LV_RES_OK;
@@ -165,6 +178,7 @@ lv_res_t stormlib::selector::opt4_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::skl1_btn_click_action(lv_obj_t * btn)
 {
+    autonSlot = 1;
     resetButtonHighlights();
     lv_btn_set_style(skills1Button, LV_BTN_STYLE_REL, &selectedStyle);
     return LV_RES_OK;
@@ -172,6 +186,7 @@ lv_res_t stormlib::selector::skl1_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::skl2_btn_click_action(lv_obj_t * btn)
 {
+    autonSlot = 2;
     resetButtonHighlights();
     lv_btn_set_style(skills2Button, LV_BTN_STYLE_REL, &selectedStyle);
     return LV_RES_OK;
@@ -179,6 +194,7 @@ lv_res_t stormlib::selector::skl2_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::skl3_btn_click_action(lv_obj_t * btn)
 {
+    autonSlot = 3;
     resetButtonHighlights();
     lv_btn_set_style(skills3Button, LV_BTN_STYLE_REL, &selectedStyle);
     return LV_RES_OK;
@@ -186,6 +202,7 @@ lv_res_t stormlib::selector::skl3_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::skl4_btn_click_action(lv_obj_t * btn)
 {
+    autonSlot = 4;
     resetButtonHighlights();
     lv_btn_set_style(skills4Button, LV_BTN_STYLE_REL, &selectedStyle);
     return LV_RES_OK;
@@ -534,4 +551,43 @@ void stormlib::selector::initialize()
     lv_obj_align(mbox1, NULL, LV_ALIGN_CENTER, 0, 0); 
 
     lv_scr_load(teamScreen);
+}
+
+int stormlib::selector::getAuton() {
+    if (!isSkills) {
+		if (isRed) {
+			if (isLeft) {
+				if (autonSlot == 1) return stormlib::selector::E_RED_LEFT_1;
+				if (autonSlot == 2) return stormlib::selector::E_RED_LEFT_2;
+				if (autonSlot == 3) return stormlib::selector::E_RED_LEFT_3;
+				if (autonSlot == 4) return stormlib::selector::E_RED_LEFT_4;
+			}
+			else {
+				if (autonSlot == 1) return stormlib::selector::E_RED_RIGHT_1;
+				if (autonSlot == 2) return stormlib::selector::E_RED_RIGHT_2;
+				if (autonSlot == 3) return stormlib::selector::E_RED_RIGHT_3;
+				if (autonSlot == 4) return stormlib::selector::E_RED_RIGHT_4;
+			}
+		}
+		else {
+			if (isLeft) {
+				if (autonSlot == 1) return stormlib::selector::E_BLUE_LEFT_1;
+				if (autonSlot == 2) return stormlib::selector::E_BLUE_LEFT_2;
+				if (autonSlot == 3) return stormlib::selector::E_BLUE_LEFT_3;
+				if (autonSlot == 4) return stormlib::selector::E_BLUE_LEFT_4;
+			}
+			else {
+				if (autonSlot == 1) return stormlib::selector::E_BLUE_RIGHT_1;
+				if (autonSlot == 2) return stormlib::selector::E_BLUE_RIGHT_2;
+				if (autonSlot == 3) return stormlib::selector::E_BLUE_RIGHT_3;
+				if (autonSlot == 4) return stormlib::selector::E_BLUE_RIGHT_4;
+			}
+		}
+	}
+	else {
+		if (autonSlot == 1) return stormlib::selector::E_SKILLS_1;
+		if (autonSlot == 2) return stormlib::selector::E_SKILLS_2;
+		if (autonSlot == 3) return stormlib::selector::E_SKILLS_3;
+		if (autonSlot == 4) return stormlib::selector::E_SKILLS_4;
+	}
 }

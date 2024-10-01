@@ -12,9 +12,11 @@ namespace stormlib {
     class selector{
 
         public:
-            selector(int defaultAuton, const char* slot1Name = "AWP", const char* slot2Name = "SAFE", const char* slot3Name = "RUSH", const char* slot4Name = "MISC");
+            selector(int defaultAuton, bool initializeNow, const char* slot1Name = "AWP", const char* slot2Name = "SAFE", const char* slot3Name = "RUSH", const char* slot4Name = "MISC");
 
             void initialize();
+
+            static int getAuton();
 
             enum AUTON_SLOTS { 
                 E_RED_RIGHT_1 = 1, 
@@ -66,6 +68,8 @@ namespace stormlib {
 
             int defaultAuton;
             const char *slot1Name,  *slot2Name,  *slot3Name,  *slot4Name;
+
+            static bool isRed, isLeft, isSkills;
             
     };
 } // namespace stormlib

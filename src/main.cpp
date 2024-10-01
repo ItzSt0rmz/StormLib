@@ -1,7 +1,11 @@
 #include "main.h"
 
 //stormlib::aRGB strand(1, 50);
-stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP", "5Ring", "Goal Rush", "Disrupt");
+stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, true, "AWP", "5Ring", "Goal Rush", "Disrupt");
+
+void autonLeft1() {
+
+}
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -44,6 +48,9 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
+	int auton = autonSelector.getAuton();
+
+	if (auton == stormlib::selector::E_BLUE_LEFT_1) autonLeft1();
 }
 
 /**
