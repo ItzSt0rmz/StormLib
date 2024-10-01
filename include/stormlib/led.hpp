@@ -97,9 +97,9 @@ namespace stormlib {
             */
             void init();
 
-            // timer_init function
+            // timer_init function (make it static)
 
-            // time_left function
+            // time_left function (make it static)
             
         private:
             int adiPort;
