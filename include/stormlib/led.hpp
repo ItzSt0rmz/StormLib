@@ -96,6 +96,10 @@ namespace stormlib {
             * @param 
             */
             void init();
+
+            // timer_init function
+
+            // time_left function
             
         private:
             int adiPort;
