@@ -1,7 +1,9 @@
 #include "main.h"
 
-//stormlib::aRGB strand(1, 50);
-stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, true, "AWP", "5Ring", "Goal Rush", "Disrupt");
+stormlib::aRGB strand1(1, 26);
+//stormlib::aRGB strand2(2, 26);
+//stormlib::aRGB strand3(3, 26);
+stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP", "5Ring", "Goal Rush", "Disrupt");
 
 void autonLeft1() {
 
@@ -15,7 +17,10 @@ void autonLeft1() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	//strand.init();
+	//autonSelector.initialize();
+	strand1.init();
+	//strand2.init();
+	//strand3.init();
 }
 
 /**
@@ -50,6 +55,7 @@ void competition_initialize() {}
 void autonomous() {
 	int auton = autonSelector.getAuton();
 
+	if (auton == 0) autonLeft1(); // put default auton here
 	if (auton == stormlib::selector::E_BLUE_LEFT_1) autonLeft1();
 }
 
@@ -67,5 +73,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	//strand.breathe(0x0000FF);
+	strand1.breathe(0x000000);
+	//strand2.flash(0xFFA500);
+	//strand3.flash(0xFFA500);
 }

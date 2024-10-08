@@ -70,20 +70,16 @@ static lv_style_t invisibleStyle;
 static lv_style_t saveDispStyle;
 static lv_style_t teamNumStyle;
 
-bool isRed = true;
-bool isLeft = true;
-bool isSkills = false;
 int autonSlot = 1;
+bool isRed, isLeft, isSkills = false;
 
 
-stormlib::selector::selector(int defaultAuton, bool initializeNow = true, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
+stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
     this->defaultAuton = defaultAuton;
     this->slot1Name = slot1Name;
     this->slot2Name = slot2Name;
     this->slot3Name = slot3Name;
     this->slot4Name = slot4Name;
-
-    if (initializeNow)  this->initialize();
 }
 
 void stormlib::selector::resetButtonHighlights() 
@@ -146,6 +142,7 @@ lv_res_t stormlib::selector::right_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::opt1_btn_click_action(lv_obj_t * btn)
 {
+    isDefault = false;
     autonSlot = 1;
     resetButtonHighlights();
     lv_btn_set_style(option1Button, LV_BTN_STYLE_REL, &selectedStyle);
@@ -154,6 +151,7 @@ lv_res_t stormlib::selector::opt1_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::opt2_btn_click_action(lv_obj_t * btn)
 {
+    isDefault = false;
     autonSlot = 2;
     resetButtonHighlights();
     lv_btn_set_style(option2Button, LV_BTN_STYLE_REL, &selectedStyle);
@@ -162,6 +160,7 @@ lv_res_t stormlib::selector::opt2_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::opt3_btn_click_action(lv_obj_t * btn)
 {
+    isDefault = false;
     autonSlot = 3;
     resetButtonHighlights();
     lv_btn_set_style(option3Button, LV_BTN_STYLE_REL, &selectedStyle);
@@ -170,6 +169,7 @@ lv_res_t stormlib::selector::opt3_btn_click_action(lv_obj_t * btn)
 
 lv_res_t stormlib::selector::opt4_btn_click_action(lv_obj_t * btn)
 {
+    isDefault = false;
     autonSlot = 4;
     resetButtonHighlights();
     lv_btn_set_style(option4Button, LV_BTN_STYLE_REL, &selectedStyle);
@@ -554,6 +554,8 @@ void stormlib::selector::initialize()
 }
 
 int stormlib::selector::getAuton() {
+    if (isDefault) return 0;
+
     if (!isSkills) {
 		if (isRed) {
 			if (isLeft) {
@@ -590,4 +592,10 @@ int stormlib::selector::getAuton() {
 		if (autonSlot == 3) return stormlib::selector::E_SKILLS_3;
 		if (autonSlot == 4) return stormlib::selector::E_SKILLS_4;
 	}
+
+    return 1;
+}
+
+bool stormlib::selector::isAllianceRed() {
+    return isRed;
 }

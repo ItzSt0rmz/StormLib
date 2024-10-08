@@ -19,6 +19,9 @@
 #include "pros/adi.hpp"
 #include "pros/rtos.hpp"
 
+std::vector<pros::ADILed> stormlib::aRGB::leds; 
+int stormlib::aRGB::count = 0; 
+
 /**
 * @brief Convert a hex color code to a hexadecimal code
 *
@@ -90,9 +93,14 @@ std::vector<uint32_t> stormlib::aRGB::genGradient(uint32_t startColor, uint32_t 
  * @param LED_strip LED object to be used for strand
  * @param default_color default color for the strand to show if not given an argument
 */
-stormlib::aRGB::aRGB(int adiPort, int length)  : led(adiPort, length) {
-    this->adiPort = adiPort;
-    this->length = length;
+stormlib::aRGB::aRGB(const int adiPort, const int length) : adiPort(adiPort), length(length) {
+    id = count;
+    count++;
+    leds.emplace_back(adiPort, length);
+
+    leds[id].set_all(0x00FFFF);
+    //pros::delay(100);
+    leds[id].update();
 }
 
 /**
@@ -131,7 +139,11 @@ void stormlib::aRGB::flash(u_int32_t color, int speed, u_int32_t color2) {
  *
  * @param 
 */
-void stormlib::aRGB::breathe(uint32_t color) {};
+void stormlib::aRGB::breathe(uint32_t color) {
+    leds.at(0).set_all(0x00FFFF);
+    //pros::delay(100);
+    leds.at(0).update();
+};
 
 /**
  * @brief Main loop where most of logic is
@@ -142,47 +154,50 @@ void stormlib::aRGB::mainLoop() {
     while (true) {
 
         // default, off mode
-        if (mode == 0) {
-            led.clear_all();
+        while (mode == 0) {
+            leds[0].clear_all();
             pros::lcd::print(0, "LED: OFF     ");
             pros::delay(100);
         }
 
         // flow mode
-        else if (mode == 1) {
+        while (mode == 1) {
             pros::lcd::print(0, "LED: FLOW     ");
 
 			// loop through each pixel gets a color, update buffer, shift color matrix by 1, repeat
 			for (int i = 0; i < 60; ++i) {
-                led.set_pixel(colors[i], i);
+                leds[0].set_pixel(colors[i], i);
 			}
 
 			// shift color vector
 			std::rotate(colors.begin(), colors.begin()+1, colors.end());
+
+            pros::delay(speed);
         }
         
         // breathe mode
-        else if (mode == 2) {
+        while (mode == 2) {
             pros::lcd::print(0, "LED: BREATHE     ");
+            pros::delay(100);
         }
 
         // flash mode
-        else if (mode == 3) {
-            led.set_all(tempColor1);
+        while (mode == 3) {
+            leds[0].set_all(tempColor1);
 			pros::delay(speed*100);
-			led.set_all(tempColor2);
+			leds[0].set_all(tempColor2);
 			pros::delay(speed*100);
         }
 
         // shine mode
-        else if (mode == 4) {}
+        while (mode == 4) {}
         
-        pros::delay(30);
+        pros::delay(50);
     }
 }
 
 void stormlib::aRGB::updater() {
-    led.update();
+    //leds[id].update();
     pros::delay(100);
 }
 
@@ -192,6 +207,6 @@ void stormlib::aRGB::updater() {
  * @param 
 */
 void stormlib::aRGB::init() {
-    pros::Task ledMainLoop([&]() { mainLoop(); });
-    pros::Task ledUpdater([&]() { updater(); });
+    //pros::Task ledMainLoop([&]() { mainLoop(); });
+    //pros::Task ledUpdater([&]() { updater(); });
 }   

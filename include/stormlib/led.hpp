@@ -11,7 +11,6 @@ namespace stormlib {
     class aRGB{
 
         public:
-            pros::ADILed led;
 
             /**
             * @brief Construct a new aRGB strand
@@ -102,13 +101,17 @@ namespace stormlib {
             // time_left function (make it static)
             
         private:
-            int adiPort;
-            int length;
+            const int adiPort;
+            const int length;
             u_int32_t default_color;
             u_int32_t tempColor1;
             u_int32_t tempColor2;   
             int speed;
             int mode;
             std::vector<uint32_t> colors;
+
+            static std::vector<pros::ADILed> leds;
+            static int count;
+            int id;
     };
 } // namespace stormlib

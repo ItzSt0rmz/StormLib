@@ -309,7 +309,7 @@
       }
     },
     "upload_options": {
-      "slot": 4,
+      "slot": 6,
       "after": "run"
     },
     "use_early_access": false
