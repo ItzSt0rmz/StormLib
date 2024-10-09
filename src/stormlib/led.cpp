@@ -1,14 +1,3 @@
-/**
- * @file src/stormlib/led.cpp
- * @author Cole Hawkins
- * @brief aRGB Class Definitions
- * @version 0.4.5
- * @date 2024-01-30
- *
- * @copyright Copyright (c) 2024
- *
- */
-
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -93,14 +82,9 @@ std::vector<uint32_t> stormlib::aRGB::genGradient(uint32_t startColor, uint32_t 
  * @param LED_strip LED object to be used for strand
  * @param default_color default color for the strand to show if not given an argument
 */
-stormlib::aRGB::aRGB(const int adiPort, const int length) : adiPort(adiPort), length(length) {
-    id = count;
-    count++;
+stormlib::aRGB::aRGB(const int adiPort, const int length) : adiPort(adiPort), length(length), id(leds.size()) {
+    buffer = {};    
     leds.emplace_back(adiPort, length);
-
-    leds[id].set_all(0x00FFFF);
-    //pros::delay(100);
-    leds[id].update();
 }
 
 /**
@@ -109,7 +93,19 @@ stormlib::aRGB::aRGB(const int adiPort, const int length) : adiPort(adiPort), le
  * @param 
 */
 void stormlib::aRGB::off() {
-    this->mode = 0;
+    shiftValue = 0;
+    buffer.clear();
+    for (int i = 0; i < length; i++) {
+        buffer.push_back(0x000000);
+    }
+}
+
+void stormlib::aRGB::setColor(u_int32_t color) {
+    shiftValue = 0;
+    buffer.clear();
+    for (int i = 0; i < length; i++) {
+        buffer.push_back(color);
+    }
 }
 
 /**
@@ -118,8 +114,8 @@ void stormlib::aRGB::off() {
  * @param 
 */
 void stormlib::aRGB::flow(u_int32_t color1, u_int32_t color2, int speed) {
-    this->mode = 1;
-    this->colors = genGradient(color1, color2, 60);
+    shiftValue = 1;
+    buffer = genGradient(color1, color2, length);
 }
 
 /**
@@ -128,10 +124,7 @@ void stormlib::aRGB::flow(u_int32_t color1, u_int32_t color2, int speed) {
  * @param 
 */
 void stormlib::aRGB::flash(u_int32_t color, int speed, u_int32_t color2) {
-    this->mode = 3;
-    this->tempColor1 = color;
-    this->speed = speed;
-    this->tempColor2 = color2;
+    
 };
 
 /**
@@ -140,73 +133,55 @@ void stormlib::aRGB::flash(u_int32_t color, int speed, u_int32_t color2) {
  * @param 
 */
 void stormlib::aRGB::breathe(uint32_t color) {
-    leds.at(0).set_all(0x00FFFF);
-    //pros::delay(100);
-    leds.at(0).update();
-};
+    
+}
 
-/**
- * @brief Main loop where most of logic is
- *
- * @param 
-*/
-void stormlib::aRGB::mainLoop() {
-    while (true) {
+void stormlib::aRGB::shiftRight(std::vector<u_int32_t>& vec, int x) {
+    int n = vec.size();
+    if (n == 0 || x % n == 0) return;
 
-        // default, off mode
-        while (mode == 0) {
-            leds[0].clear_all();
-            pros::lcd::print(0, "LED: OFF     ");
-            pros::delay(100);
-        }
+    x = x % n;
 
-        // flow mode
-        while (mode == 1) {
-            pros::lcd::print(0, "LED: FLOW     ");
+    std::rotate(vec.rbegin(), vec.rbegin() + x, vec.rend());
+}
 
-			// loop through each pixel gets a color, update buffer, shift color matrix by 1, repeat
-			for (int i = 0; i < 60; ++i) {
-                leds[0].set_pixel(colors[i], i);
-			}
+void stormlib::aRGB::bufferShift() {
+   shiftRight(buffer, shiftValue);
+}
 
-			// shift color vector
-			std::rotate(colors.begin(), colors.begin()+1, colors.end());
-
-            pros::delay(speed);
-        }
-        
-        // breathe mode
-        while (mode == 2) {
-            pros::lcd::print(0, "LED: BREATHE     ");
-            pros::delay(100);
-        }
-
-        // flash mode
-        while (mode == 3) {
-            leds[0].set_all(tempColor1);
-			pros::delay(speed*100);
-			leds[0].set_all(tempColor2);
-			pros::delay(speed*100);
-        }
-
-        // shine mode
-        while (mode == 4) {}
-        
-        pros::delay(50);
+void stormlib::aRGB::update() {
+    for (int i = 0; i < length; i++) {
+        leds.at(id).set_pixel(buffer.at(i), i);
+        leds.at(id).update();
     }
 }
 
-void stormlib::aRGB::updater() {
-    //leds[id].update();
-    pros::delay(100);
+// *********************************************************************************************************************************************************
+
+stormlib::aRGB_manager::aRGB_manager(aRGB* strand1, aRGB* strand2, aRGB* strand3, aRGB* strand4, aRGB* strand5, aRGB* strand6, aRGB* strand7, aRGB* strand8):
+    strand1(strand1),
+    strand2(strand2),
+    strand3(strand3),
+    strand4(strand4),
+    strand5(strand5),
+    strand6(strand6),
+    strand7(strand7),
+    strand8(strand8)
+    {
+        strands = {strand1, strand2, strand3, strand4, strand5, strand6, strand7, strand8};
+    }
+
+void stormlib::aRGB_manager::initialize() {
+    pros::Task ledUpdater([&]() { updater(); });
 }
 
-/**
- * @brief Creates task for main loop
- *
- * @param 
-*/
-void stormlib::aRGB::init() {
-    //pros::Task ledMainLoop([&]() { mainLoop(); });
-    //pros::Task ledUpdater([&]() { updater(); });
-}   
+void stormlib::aRGB_manager::updater() {
+    while (true) {
+        for (auto strand : strands) {
+            strand->bufferShift();
+            strand->update();
+        }
+
+        pros::delay(50);
+    }
+}

@@ -1,13 +1,25 @@
 #include "main.h"
+#include "stormlib/led.hpp"
 
-stormlib::aRGB strand1(1, 26);
-//stormlib::aRGB strand2(2, 26);
-//stormlib::aRGB strand3(3, 26);
+stormlib::aRGB strand1(8, 26);
+stormlib::aRGB strand2(7, 26);
+stormlib::aRGB strand3(6, 26);
 stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP", "5Ring", "Goal Rush", "Disrupt");
+
+stormlib::aRGB_manager manager(
+	&strand1,
+	&strand2,
+	&strand3,
+	nullptr,
+	nullptr,
+	nullptr,
+	nullptr,
+	nullptr
+);
 
 void autonLeft1() {
 
-}
+} 
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -17,10 +29,8 @@ void autonLeft1() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	//autonSelector.initialize();
-	strand1.init();
-	//strand2.init();
-	//strand3.init();
+	autonSelector.initialize();
+	manager.initialize();
 }
 
 /**
@@ -73,7 +83,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	strand1.breathe(0x000000);
+	strand1.setColor(0x00FFFF);
 	//strand2.flash(0xFFA500);
 	//strand3.flash(0xFFA500);
 }

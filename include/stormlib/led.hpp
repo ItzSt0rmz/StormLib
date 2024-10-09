@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pros/adi.hpp"
+#include <memory>
 #include <string>
 
 namespace stormlib {
@@ -80,38 +81,48 @@ namespace stormlib {
             */
             void off();
 
-            /**
-            * @brief Main loop where most of logic is
-            *
-            * @param 
-            */
-            void mainLoop();
+            static void updater();
 
-            void updater();
+            void bufferShift();
+
+            void shiftRight(std::vector<u_int32_t>& vec, int x);
+
+            void setColor(uint32_t color);
+
+            void update();
 
             /**
             * @brief Creates task for main loop
             *
             * @param 
             */
-            void init();
 
             // timer_init function (make it static)
 
             // time_left function (make it static)
+
+            static std::vector<pros::ADILed> leds;
             
         private:
             const int adiPort;
             const int length;
-            u_int32_t default_color;
-            u_int32_t tempColor1;
-            u_int32_t tempColor2;   
-            int speed;
-            int mode;
-            std::vector<uint32_t> colors;
-
-            static std::vector<pros::ADILed> leds;
+            u_int32_t default_color, tempColor1, tempColor2;
+            int speed, mode, shiftValue = 0;
+            std::vector<uint32_t> colors, buffer;
+            
             static int count;
             int id;
+    };
+
+    class aRGB_manager {
+
+        public:
+            aRGB_manager(aRGB *strand1, aRGB *strand2, aRGB *strand3, aRGB *strand4, aRGB *strand5, aRGB *strand6, aRGB *strand7, aRGB *strand8);
+            void initialize();
+            void updater();
+
+        private:
+            aRGB *strand1, *strand2, *strand3, *strand4, *strand5, *strand6, *strand7, *strand8;
+            std::vector<aRGB*> strands;
     };
 } // namespace stormlib
