@@ -110,7 +110,6 @@ namespace stormlib {
             int speed, mode, shiftValue = 0;
             std::vector<uint32_t> colors, buffer;
             
-            static int count;
             int id;
     };
 

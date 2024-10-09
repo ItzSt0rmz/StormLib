@@ -9,7 +9,6 @@
 #include "pros/rtos.hpp"
 
 std::vector<pros::ADILed> stormlib::aRGB::leds; 
-int stormlib::aRGB::count = 0; 
 
 /**
 * @brief Convert a hex color code to a hexadecimal code
@@ -152,8 +151,8 @@ void stormlib::aRGB::bufferShift() {
 void stormlib::aRGB::update() {
     for (int i = 0; i < length; i++) {
         leds.at(id).set_pixel(buffer.at(i), i);
-        leds.at(id).update();
     }
+    leds.at(id).update();
 }
 
 // *********************************************************************************************************************************************************
