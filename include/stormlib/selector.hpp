@@ -73,8 +73,4 @@ namespace stormlib {
             int defaultAuton;
             const char *slot1Name,  *slot2Name,  *slot3Name,  *slot4Name;
     };
-
-    bool selector::isRed, selector::isSkills, selector::isLeft = false;
-    bool selector::isDefault = true;
-
 } // namespace stormlib

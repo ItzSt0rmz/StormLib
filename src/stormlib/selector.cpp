@@ -1,4 +1,5 @@
 #include "main.h"
+#include "selector.hpp"
 #include <string>
 
 using namespace pros;
@@ -71,7 +72,8 @@ static lv_style_t saveDispStyle;
 static lv_style_t teamNumStyle;
 
 int autonSlot = 1;
-bool isRed, isLeft, isSkills = false;
+bool stormlib::selector::isRed, stormlib::selector::isLeft, stormlib::selector::isSkills = false;
+bool stormlib::selector::isDefault = true;
 
 
 stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
@@ -587,10 +589,10 @@ int stormlib::selector::getAuton() {
 		}
 	}
 	else {
-		if (autonSlot == 1) return stormlib::selector::E_SKILLS_1;
-		if (autonSlot == 2) return stormlib::selector::E_SKILLS_2;
-		if (autonSlot == 3) return stormlib::selector::E_SKILLS_3;
-		if (autonSlot == 4) return stormlib::selector::E_SKILLS_4;
+        if (autonSlot == 1) return stormlib::selector::E_SKILLS_1;
+        if (autonSlot == 2) return stormlib::selector::E_SKILLS_2;
+        if (autonSlot == 3) return stormlib::selector::E_SKILLS_3;
+        if (autonSlot == 4) return stormlib::selector::E_SKILLS_4;
 	}
 
     return 1;

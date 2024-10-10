@@ -82,7 +82,6 @@ std::vector<uint32_t> stormlib::aRGB::genGradient(uint32_t startColor, uint32_t 
  * @param default_color default color for the strand to show if not given an argument
 */
 stormlib::aRGB::aRGB(const int adiPort, const int length) : adiPort(adiPort), length(length), id(leds.size()) {
-    buffer = {};    
     leds.emplace_back(adiPort, length);
 }
 
@@ -94,17 +93,13 @@ stormlib::aRGB::aRGB(const int adiPort, const int length) : adiPort(adiPort), le
 void stormlib::aRGB::off() {
     shiftValue = 0;
     buffer.clear();
-    for (int i = 0; i < length; i++) {
-        buffer.push_back(0x000000);
-    }
+    
 }
 
 void stormlib::aRGB::setColor(u_int32_t color) {
     shiftValue = 0;
     buffer.clear();
-    for (int i = 0; i < length; i++) {
-        buffer.push_back(color);
-    }
+    
 }
 
 /**
@@ -135,17 +130,10 @@ void stormlib::aRGB::breathe(uint32_t color) {
     
 }
 
-void stormlib::aRGB::shiftRight(std::vector<u_int32_t>& vec, int x) {
-    int n = vec.size();
-    if (n == 0 || x % n == 0) return;
-
-    x = x % n;
-
-    std::rotate(vec.rbegin(), vec.rbegin() + x, vec.rend());
-}
-
 void stormlib::aRGB::bufferShift() {
-   shiftRight(buffer, shiftValue);
+    if (buffer.size() == 0 || shiftValue == 0 || buffer.size() < shiftValue) return;
+    
+    std::rotate(buffer.rbegin(), buffer.rbegin() + shiftValue, buffer.rend());
 }
 
 void stormlib::aRGB::update() {
