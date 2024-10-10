@@ -10,7 +10,7 @@
 #include "pros/adi.hpp"
 #include "pros/rtos.hpp"
 
-std::vector<pros::adi::Led> stormlib::aRGB::leds = {}; 
+std::vector<pros::adi::Led> stormlib::aRGB::leds; 
 
 /**
 * @brief Convert a hex color code to a hexadecimal code
@@ -84,7 +84,8 @@ std::vector<uint32_t> stormlib::aRGB::genGradient(uint32_t startColor, uint32_t 
  * @param default_color default color for the strand to show if not given an argument
 */
 stormlib::aRGB::aRGB(const int adiPort, const int length) : adiPort(adiPort), length(length), id(leds.size()) {
-    leds.emplace_back(adiPort, length);
+    pros::adi::Led led(adiPort, length);
+    leds.push_back(led);
 }
 
 /**
@@ -99,6 +100,8 @@ void stormlib::aRGB::off() {
 }
 
 void stormlib::aRGB::setColor(u_int32_t color) {
+    if (leds.empty()) pros::lcd::print(0, "LEDS EMPTY>>>>");
+    pros::lcd::print(1, "Strip id: %d", id);
     shiftValue = 0;
     buffer.clear();
     buffer.resize(length, color);
@@ -135,26 +138,17 @@ void stormlib::aRGB::breathe(uint32_t color) {
 void stormlib::aRGB::bufferShift() {
     if (buffer.size() == 0 || buffer.size() < shiftValue || shiftValue == 0) return;
 
-    //std::rotate(buffer.rbegin(), buffer.rbegin() + shiftValue, buffer.rend());
-}
-
-void stormlib::aRGB::updater() {
-    while (true) {
-		for (int i = 0; i < leds.size(); i++) {
-			leds[i].update();
-	}
-		pros::delay(100);
-	}
+    std::rotate(buffer.rbegin(), buffer.rbegin() + shiftValue, buffer.rend());
 }
 
 void stormlib::aRGB::update() {
-
     if (leds.empty()) return;
-    
+
     for (int i = 0; i < leds[id].length(); i++) {
-        leds[id][i] = buffer[i];
+        leds[id].set_pixel(buffer[i], i);
     }
 
+    leds[id].update();
 }
 
 // *********************************************************************************************************************************************************
@@ -185,5 +179,4 @@ void stormlib::aRGB_manager::updater() {
 
 void stormlib::aRGB_manager::initialize() {
     pros::Task task1([&]() { updater(); });
-    pros::Task task2([&]() { stormlib::aRGB::updater(); });
 }

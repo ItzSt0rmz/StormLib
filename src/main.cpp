@@ -2,13 +2,15 @@
 #include "stormlib/led.hpp"
 
 stormlib::aRGB strand1(8, 26);
+stormlib::aRGB strand2(7, 26);
+stormlib::aRGB strand3(6, 26);
 
 stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP", "5Ring", "Goal Rush", "Disrupt");
 
 stormlib::aRGB_manager manager(
 	&strand1,
-	nullptr,
-	nullptr,
+	&strand2,
+	&strand3,
 	nullptr,
 	nullptr,
 	nullptr,
@@ -27,8 +29,8 @@ void autonLeft1() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	//pros::lcd::initialize();
-	autonSelector.initialize();
+	pros::lcd::initialize();
+	//autonSelector.initialize();
 	manager.initialize();
 }
 
@@ -82,7 +84,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	strand1.setColor(0x00FFFF);
-	//strand2.flash(0xFFA500);
+	//strand1.setColor(0x00FFFF);
+	strand2.setColor(0xFFA500);
 	//strand3.flash(0xFFA500);
 }

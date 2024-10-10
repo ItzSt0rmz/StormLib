@@ -64,7 +64,6 @@ namespace stormlib {
             static void skl4_btn_click_action(lv_event_t * event);
             static void back_button_click_action1(lv_event_t * event);
             static void back_button_click_action2(lv_event_t * event);
-            static void mbox_apply_action(lv_event_t * event);
 
             static void menuSetup();
 

@@ -1,5 +1,6 @@
-#include "liblvgl/misc/lv_color.h"
+#include "led.hpp"
 #include "main.h"
+#include "selector.hpp"
 #include <string>
 
 using namespace pros;
@@ -72,8 +73,8 @@ static lv_style_t saveDispStyle;
 static lv_style_t teamNumStyle;
 
 int autonSlot = 1;
-bool isRed, isLeft, isSkills = false;
-bool isDefault = true;
+bool stormlib::selector::isRed, stormlib::selector::isLeft, stormlib::selector::isSkills = false;
+bool stormlib::selector::isDefault = true;
 
 
 stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
@@ -192,39 +193,34 @@ void stormlib::selector::back_button_click_action2(lv_event_t * event)
     resetButtonHighlights();
 }
 
-void stormlib::selector::mbox_apply_action(lv_event_t * event)
-{
-    lv_scr_load(teamScreen);
-}
-
 void stormlib::selector::menuSetup() 
 {
     exitButton = lv_btn_create(lv_scr_act()); // create button, lv_scr_act() is default screen object
     lv_obj_add_event_cb(exitButton, exitMenu_btn_click_action, LV_EVENT_CLICKED, NULL); // set function to be called on button click
-    lv_obj_add_style(exitButton, &menuStyle1, LV_STATE_PRESSED); // set the released style
-    lv_obj_add_style(exitButton, &menuStyle1, LV_STATE_PRESSED); // set the pressed style
+    lv_obj_add_style(exitButton, &menuStyle1, LV_INDEV_STATE_PRESSED); // set the released style
+    lv_obj_add_style(exitButton, &menuStyle1, LV_INDEV_STATE_RELEASED); // set the pressed style
     lv_obj_set_size(exitButton, 160, 40); // set the button size
-    lv_obj_align(exitButton, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0); // set the position to top mid
+    lv_obj_align(exitButton, LV_ALIGN_TOP_LEFT, 0, 0); // set the position to top mid
 
     exitButtonLabel = lv_label_create(exitButton); // create label and puts it inside of the button
     lv_label_set_text(exitButtonLabel, "Exit"); // sets label text
 
     autonsButton = lv_btn_create(lv_scr_act()); // create button, lv_scr_act() is default screen object
     lv_obj_add_event_cb(autonsButton, autonsMenu_btn_click_action, LV_EVENT_CLICKED, NULL); // set function to be called on button click
-    lv_obj_add_style(autonsButton, &menuStyle1, LV_STATE_RELEASED); // set the released style
+    lv_obj_add_style(autonsButton, &menuStyle1, LV_INDEV_STATE_RELEASED); // set the released style
     lv_obj_add_style(autonsButton, &menuStyle1, LV_STATE_PRESSED); // set the pressed style
     lv_obj_set_size(autonsButton, 160, 40); // set the button size
-    lv_obj_align(autonsButton, NULL, LV_ALIGN_IN_TOP_LEFT, 160, 0); // set the position to top mid
+    lv_obj_align(autonsButton, LV_ALIGN_TOP_LEFT, 160, 0); // set the position to top mid
 
     autonsButtonLabel = lv_label_create(autonsButton); // create label and puts it inside of the button
     lv_label_set_text(autonsButtonLabel, "Autons"); // sets label text
 
     skillsButton = lv_btn_create(lv_scr_act()); // create button, lv_scr_act() is default screen object
     lv_obj_add_event_cb(skillsButton, skillsMenu_btn_click_action, LV_EVENT_CLICKED, NULL); // set function to be called on button click
-    lv_obj_add_style(skillsButton, &menuStyle1, LV_STATE_RELEASED); // set the released style
+    lv_obj_add_style(skillsButton, &menuStyle1, LV_INDEV_STATE_RELEASED); // set the released style
     lv_obj_add_style(skillsButton, &menuStyle1, LV_STATE_PRESSED); // set the pressed style
     lv_obj_set_size(skillsButton, 160, 40); // set the button size
-    lv_obj_align(skillsButton, NULL, LV_ALIGN_IN_TOP_LEFT, 320, 0); // set the position to top mid
+    lv_obj_align(skillsButton, LV_ALIGN_TOP_LEFT, 320, 0); // set the position to top mid
 
     skillsButtonLabel = lv_label_create(skillsButton); // create label and puts it inside of the button
     lv_label_set_text(skillsButtonLabel, "Skills"); // sets label text
@@ -304,16 +300,17 @@ void stormlib::selector::initialize()
     lv_style_set_pad_ver(&style_btn_rel, 8);
 
     lv_style_init(&style_btn_pr);
-    lv_style_copy(&style_btn_pr, &style_btn_rel); // Copy released style properties
-    lv_style_set_empty(&style_btn_pr, false);
+    lv_style_is_empty(&style_btn_rel); // Draw only the border
+    lv_style_set_border_color(&style_btn_pr, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&style_btn_pr, 2);
+    lv_style_set_border_opa(&style_btn_pr, LV_OPA_70);
+    lv_style_set_pad_hor(&style_btn_pr, 12);
+    lv_style_set_pad_ver(&style_btn_pr, 8);
     lv_style_set_bg_color(&style_btn_pr, LV_COLOR_MAKE(0x5d, 0x0f, 0x04));
     lv_style_set_bg_grad_color(&style_btn_pr, LV_COLOR_MAKE(0x5d, 0x0f, 0x04));
 
     lv_style_init(&invisibleStyle);
-    lv_style_set_empty(&invisibleStyle, true); // Invisible style
-
-
-    saveDispStyle.body.radius = 0;    
+    lv_style_set_opa(&invisibleStyle, 0);
 
     teamScreen = lv_obj_create(NULL);
 
@@ -331,165 +328,168 @@ void stormlib::selector::initialize()
 
     menuSetup();
 
-    lv_btn_set_style(autonsButton, LV_BTN_STYLE_REL, &menuStyle2);
+    lv_obj_add_style(autonsButton, &menuStyle2, LV_PART_MAIN);
 
-    redButton = lv_btn_create(teamScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(redButton, LV_BTN_ACTION_CLICK, red_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(redButton, LV_BTN_STYLE_REL, &redStyle); //set the relesed style
-    lv_btn_set_style(redButton, LV_BTN_STYLE_PR, &redStyle); //set the pressed style
-    lv_obj_set_size(redButton, 240, 200); //set the button size
-    lv_obj_align(redButton, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 40); //set the position to top mid
+    // Create and configure redButton
+    redButton = lv_btn_create(teamScreen); // create button
+    lv_obj_add_event_cb(redButton, red_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(redButton, &redStyle, LV_PART_MAIN); // set the style for released and pressed state
+    lv_obj_set_size(redButton, 240, 200); // set button size
+    lv_obj_align(redButton, LV_ALIGN_TOP_LEFT, 0, 40); // set position
 
-    redButtonLabel = lv_label_create(redButton, NULL); //create label and puts it inside of the button
-    lv_label_set_text(redButtonLabel, "Red"); //sets label text
-    
-	blueButton = lv_btn_create(teamScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(blueButton, LV_BTN_ACTION_CLICK, blue_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(blueButton, LV_BTN_STYLE_REL, &blueStyle); //set the relesed style
-    lv_btn_set_style(blueButton, LV_BTN_STYLE_PR, &blueStyle); //set the pressed style
-    lv_obj_set_size(blueButton, 240, 200); //set the button size
-    lv_obj_align(blueButton, lv_scr_act(), LV_ALIGN_IN_TOP_LEFT, 240, 40); //set the position to top mid
+    // Create label for redButton
+    redButtonLabel = lv_label_create(redButton); // create label inside button
+    lv_label_set_text(redButtonLabel, "Red"); // set label text
 
-    blueButtonLabel = lv_label_create(blueButton, NULL); //create label and puts it inside of the button
-    lv_label_set_text(blueButtonLabel, "Blue"); //sets label text
+    // Create and configure blueButton
+    blueButton = lv_btn_create(teamScreen); // create button
+    lv_obj_add_event_cb(blueButton, blue_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(blueButton, &blueStyle, LV_PART_MAIN); // set the style for released and pressed state
+    lv_obj_set_size(blueButton, 240, 200); // set button size
+    lv_obj_align(blueButton, LV_ALIGN_TOP_LEFT, 240, 40); // set position
 
+    // Create label for blueButton
+    blueButtonLabel = lv_label_create(blueButton); // create label inside button
+    lv_label_set_text(blueButtonLabel, "Blue"); // set label text
+
+    // Load the side screen
     lv_scr_load(sideScreen);
-    
+
+    // Menu setup
     menuSetup();
 
-    lv_btn_set_style(autonsButton, LV_BTN_STYLE_REL, &menuStyle2);
+    lv_obj_add_style(autonsButton, &menuStyle2, LV_PART_MAIN);
 
-	leftButton = lv_btn_create(sideScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(leftButton, LV_BTN_ACTION_CLICK, left_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(leftButton, LV_BTN_STYLE_REL, &myButtonStyleREL); //set the relesed style
-    lv_btn_set_style(leftButton, LV_BTN_STYLE_PR, &myButtonStylePR); //set the pressed style
-    lv_obj_set_size(leftButton, 240, 200); //set the button size
-    lv_obj_align(leftButton, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 40); //set the position to top mid
+    leftButton = lv_btn_create(sideScreen); // create button
+    lv_obj_add_event_cb(leftButton, left_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(leftButton, &myButtonStyleREL, LV_PART_MAIN); // set released style
+    lv_obj_add_style(leftButton, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_set_size(leftButton, 240, 200); // set button size
+    lv_obj_align(leftButton, LV_ALIGN_TOP_LEFT, 0, 40); // set position
 
-    leftButtonLabel = lv_label_create(leftButton, NULL); //create label and puts it inside of the button
-    lv_label_set_text(leftButtonLabel, "Left"); //sets label text
+    leftButtonLabel = lv_label_create(leftButton); // create label inside button
+    lv_label_set_text(leftButtonLabel, "Left"); // set label text
 
-	rightButton = lv_btn_create(sideScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(rightButton, LV_BTN_ACTION_CLICK, right_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(rightButton, LV_BTN_STYLE_REL, &myButtonStyleREL); //set the relesed style
-    lv_btn_set_style(rightButton, LV_BTN_STYLE_PR, &myButtonStylePR); //set the pressed style
-    lv_obj_set_size(rightButton, 240, 200); //set the button size
-    lv_obj_align(rightButton, NULL, LV_ALIGN_IN_TOP_LEFT, 240, 40); //set the position to top mid
+    rightButton = lv_btn_create(sideScreen); // create button
+    lv_obj_add_event_cb(rightButton, right_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(rightButton, &myButtonStyleREL, LV_PART_MAIN); // set released style
+    lv_obj_add_style(rightButton, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_set_size(rightButton, 240, 200); // set button size
+    lv_obj_align(rightButton, LV_ALIGN_TOP_LEFT, 240, 40); // set position
 
-    rightButtonLabel = lv_label_create(rightButton, NULL); //create label and puts it inside of the button
-    lv_label_set_text(rightButtonLabel, "Right"); //sets label text
+    rightButtonLabel = lv_label_create(rightButton); // create label inside button
+    lv_label_set_text(rightButtonLabel, "Right"); // set label text
 
-    backButton = lv_btn_create(lv_scr_act(), NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(backButton, LV_BTN_ACTION_CLICK, back_button_click_action1); //set function to be called on button click
-    lv_btn_set_style(backButton, LV_BTN_STYLE_REL, &backStyle); //set the relesed style
-    lv_btn_set_style(backButton, LV_BTN_STYLE_PR, &backStyle); //set the pressed style
-    lv_obj_set_size(backButton, 100, 60); //set the button size
-    lv_obj_align(backButton, NULL, LV_ALIGN_CENTER, 0, 20); //set the position to top mid
+    backButton = lv_btn_create(lv_scr_act()); // create button
+    lv_obj_add_event_cb(backButton, back_button_click_action1, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(backButton, &backStyle, LV_PART_MAIN); // set style
+    lv_obj_set_size(backButton, 100, 60); // set button size
+    lv_obj_align(backButton, LV_ALIGN_CENTER, 0, 20); // set position
 
-    backButtonLabel = lv_label_create(backButton, NULL); //create label and puts it inside of the button
-    lv_label_set_text(backButtonLabel, "Back"); //sets label text
+    backButtonLabel = lv_label_create(backButton); // create label inside button
+    lv_label_set_text(backButtonLabel, "Back"); // set label text
 
+    // Load the option screen
     lv_scr_load(optionScreen);
 
     menuSetup();
 
-    lv_btn_set_style(autonsButton, LV_BTN_STYLE_REL, &menuStyle2);
+    lv_obj_add_style(autonsButton, &menuStyle2, LV_PART_MAIN);
 
-	option1Button = lv_btn_create(optionScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(option1Button, LV_BTN_ACTION_CLICK, opt1_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(option1Button, LV_BTN_STYLE_REL, &myButtonStyleREL); //set the relesed style
-    lv_btn_set_style(option1Button, LV_BTN_STYLE_PR, &myButtonStylePR); //set the pressed style
-    lv_obj_set_size(option1Button, 240, 100); //set the button size
-    lv_obj_align(option1Button, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 40); //set the position to top mid
+    option1Button = lv_btn_create(optionScreen); // create button
+    lv_obj_add_event_cb(option1Button, opt1_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(option1Button, &myButtonStyleREL, LV_PART_MAIN); // set released style
+    lv_obj_add_style(option1Button, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_set_size(option1Button, 240, 100); // set button size
+    lv_obj_align(option1Button, LV_ALIGN_TOP_LEFT, 0, 40); // set position
 
-    option1ButtonLabel = lv_label_create(option1Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(option1ButtonLabel, slot1Name); //sets label text
+    option1ButtonLabel = lv_label_create(option1Button); // create label inside button
+    lv_label_set_text(option1ButtonLabel, slot1Name); // set label text
 
-	option2Button = lv_btn_create(optionScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(option2Button, LV_BTN_ACTION_CLICK, opt2_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(option2Button, LV_BTN_STYLE_REL, &myButtonStyleREL); //set the relesed style
-    lv_btn_set_style(option2Button, LV_BTN_STYLE_PR, &myButtonStylePR); //set the pressed style
-    lv_obj_set_size(option2Button, 240, 100); //set the button size
-    lv_obj_align(option2Button, NULL, LV_ALIGN_IN_TOP_LEFT, 240, 40); //set the position to top mid
+    option2Button = lv_btn_create(optionScreen); // create button
+    lv_obj_add_event_cb(option2Button, opt2_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(option2Button, &myButtonStyleREL, LV_PART_MAIN); // set released style
+    lv_obj_add_style(option2Button, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_set_size(option2Button, 240, 100); // set button size
+    lv_obj_align(option2Button, LV_ALIGN_TOP_LEFT, 240, 40); // set position
 
-    option2ButtonLabel = lv_label_create(option2Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(option2ButtonLabel, slot2Name); //sets label text
+    option2ButtonLabel = lv_label_create(option2Button); // create label inside button
+    lv_label_set_text(option2ButtonLabel, slot2Name); // set label text
 
-	option3Button = lv_btn_create(optionScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(option3Button, LV_BTN_ACTION_CLICK, opt3_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(option3Button, LV_BTN_STYLE_REL, &myButtonStyleREL); //set the relesed style
-    lv_btn_set_style(option3Button, LV_BTN_STYLE_PR, &myButtonStylePR); //set the pressed style
-    lv_obj_set_size(option3Button, 240, 100); //set the button size
-    lv_obj_align(option3Button, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 140); //set the position to top mid
+    option3Button = lv_btn_create(optionScreen); // create button
+    lv_obj_add_event_cb(option3Button, opt3_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(option3Button, &myButtonStyleREL, LV_PART_MAIN); // set released style
+    lv_obj_add_style(option3Button, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_set_size(option3Button, 240, 100); // set button size
+    lv_obj_align(option3Button, LV_ALIGN_TOP_LEFT, 0, 140); // set position
 
-    option3ButtonLabel = lv_label_create(option3Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(option3ButtonLabel, slot3Name); //sets label text
+    option3ButtonLabel = lv_label_create(option3Button); // create label inside button
+    lv_label_set_text(option3ButtonLabel, slot3Name); // set label text
 
-	option4Button = lv_btn_create(optionScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(option4Button, LV_BTN_ACTION_CLICK, opt4_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(option4Button, LV_BTN_STYLE_REL, &myButtonStyleREL); //set the relesed style
-    lv_btn_set_style(option4Button, LV_BTN_STYLE_PR, &myButtonStylePR); //set the pressed style
-    lv_obj_set_size(option4Button, 240, 100); //set the button size
-    lv_obj_align(option4Button, NULL, LV_ALIGN_IN_TOP_LEFT, 240, 140); //set the position to top mid
+    option4Button = lv_btn_create(optionScreen); // create button
+    lv_obj_add_event_cb(option4Button, opt4_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(option4Button, &myButtonStyleREL, LV_PART_MAIN); // set released style
+    lv_obj_add_style(option4Button, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_set_size(option4Button, 240, 100); // set button size
+    lv_obj_align(option4Button, LV_ALIGN_TOP_LEFT, 240, 140); // set position
 
-    option4ButtonLabel = lv_label_create(option4Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(option4ButtonLabel, slot4Name); //sets label text
+    option4ButtonLabel = lv_label_create(option4Button); // create label inside button
+    lv_label_set_text(option4ButtonLabel, slot4Name); // set label text
 
-    backButton = lv_btn_create(lv_scr_act(), NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(backButton, LV_BTN_ACTION_CLICK, back_button_click_action2); //set function to be called on button click
-    lv_btn_set_style(backButton, LV_BTN_STYLE_REL, &backStyle); //set the relesed style
-    lv_btn_set_style(backButton, LV_BTN_STYLE_PR, &backStyle); //set the pressed style
-    lv_obj_set_size(backButton, 100, 60); //set the button size
-    lv_obj_align(backButton, NULL, LV_ALIGN_CENTER, 0, 20); //set the position to top mid
+    backButton = lv_btn_create(lv_scr_act()); // create button
+    lv_obj_add_event_cb(backButton, back_button_click_action2, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(backButton, &backStyle, LV_PART_MAIN); // set released style and pressed style
+    lv_obj_set_size(backButton, 100, 60); // set button size
+    lv_obj_align(backButton, LV_ALIGN_CENTER, 0, 20); // set position
 
-    backButtonLabel = lv_label_create(backButton, NULL); //create label and puts it inside of the button
-    lv_label_set_text(backButtonLabel, "Back"); //sets label text
+    backButtonLabel = lv_label_create(backButton); // create label inside button
+    lv_label_set_text(backButtonLabel, "Back"); // set label text
 
     lv_scr_load(skillsScreen);
 
     menuSetup();
 
-    lv_btn_set_style(skillsButton, LV_BTN_STYLE_REL, &menuStyle2);
+    lv_obj_add_style(skillsButton, &menuStyle2, LV_PART_MAIN);
 
-    skills1Button = lv_btn_create(skillsScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(skills1Button, LV_BTN_ACTION_CLICK, skl1_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(skills1Button, LV_BTN_STYLE_REL, &myButtonStyleREL); //set the relesed style
-    lv_btn_set_style(skills1Button, LV_BTN_STYLE_PR, &myButtonStylePR); //set the pressed style
-    lv_obj_set_size(skills1Button, 240, 100); //set the button size
-    lv_obj_align(skills1Button, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 40); //set the position to top mid
+    skills1Button = lv_btn_create(skillsScreen);
+    lv_obj_add_event_cb(skills1Button, skl1_btn_click_action, LV_EVENT_CLICKED, NULL);
+    lv_obj_add_style(skills1Button, &myButtonStyleREL, LV_PART_MAIN);
+    lv_obj_add_style(skills1Button, &myButtonStylePR, LV_STATE_PRESSED);
+    lv_obj_set_size(skills1Button, 240, 100);
+    lv_obj_align(skills1Button, LV_ALIGN_TOP_LEFT, 0, 40);
 
-    skills1ButtonLabel = lv_label_create(skills1Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(skills1ButtonLabel, "Skills 1"); //sets label text
+    skills1ButtonLabel = lv_label_create(skills1Button);
+    lv_label_set_text(skills1ButtonLabel, "Skills 1");
 
-	skills2Button = lv_btn_create(skillsScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(skills2Button, LV_BTN_ACTION_CLICK, skl2_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(skills2Button, LV_BTN_STYLE_REL, &myButtonStyleREL); //set the relesed style
-    lv_btn_set_style(skills2Button, LV_BTN_STYLE_PR, &myButtonStylePR); //set the pressed style
-    lv_obj_set_size(skills2Button, 240, 100); //set the button size
-    lv_obj_align(skills2Button, NULL, LV_ALIGN_IN_TOP_LEFT, 240, 40); //set the position to top mid
+    skills2Button = lv_btn_create(skillsScreen);
+    lv_obj_add_event_cb(skills2Button, skl2_btn_click_action, LV_EVENT_CLICKED, NULL);
+    lv_obj_add_style(skills2Button, &myButtonStyleREL, LV_PART_MAIN);
+    lv_obj_add_style(skills2Button, &myButtonStylePR, LV_STATE_PRESSED);
+    lv_obj_set_size(skills2Button, 240, 100);
+    lv_obj_align(skills2Button, LV_ALIGN_TOP_LEFT, 240, 40);
 
-    skills2ButtonLabel = lv_label_create(skills2Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(skills2ButtonLabel, "Skills 2"); //sets label text
+    skills2ButtonLabel = lv_label_create(skills2Button);
+    lv_label_set_text(skills2ButtonLabel, "Skills 2");
 
-	skills3Button = lv_btn_create(skillsScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(skills3Button, LV_BTN_ACTION_CLICK, skl3_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(skills3Button, LV_BTN_STYLE_REL, &myButtonStyleREL); //set the relesed style
-    lv_btn_set_style(skills3Button, LV_BTN_STYLE_PR, &myButtonStylePR); //set the pressed style
-    lv_obj_set_size(skills3Button, 240, 100); //set the button size
-    lv_obj_align(skills3Button, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 140); //set the position to top mid
+    skills3Button = lv_btn_create(skillsScreen);
+    lv_obj_add_event_cb(skills3Button, skl3_btn_click_action, LV_EVENT_CLICKED, NULL);
+    lv_obj_add_style(skills3Button, &myButtonStyleREL, LV_PART_MAIN);
+    lv_obj_add_style(skills3Button, &myButtonStylePR, LV_STATE_PRESSED);
+    lv_obj_set_size(skills3Button, 240, 100);
+    lv_obj_align(skills3Button, LV_ALIGN_TOP_LEFT, 0, 140);
 
-    skills3ButtonLabel = lv_label_create(skills3Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(skills3ButtonLabel, "Skills 3"); //sets label text
+    skills3ButtonLabel = lv_label_create(skills3Button);
+    lv_label_set_text(skills3ButtonLabel, "Skills 3");
 
-	skills4Button = lv_btn_create(skillsScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(skills4Button, LV_BTN_ACTION_CLICK, skl4_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(skills4Button, LV_BTN_STYLE_REL, &myButtonStyleREL); //set the relesed style
-    lv_btn_set_style(skills4Button, LV_BTN_STYLE_PR, &myButtonStylePR); //set the pressed style
-    lv_obj_set_size(skills4Button, 240, 100); //set the button size
-    lv_obj_align(skills4Button, NULL, LV_ALIGN_IN_TOP_LEFT, 240, 140); //set the position to top mid
+    skills4Button = lv_btn_create(skillsScreen);
+    lv_obj_add_event_cb(skills4Button, skl4_btn_click_action, LV_EVENT_CLICKED, NULL);
+    lv_obj_add_style(skills4Button, &myButtonStyleREL, LV_PART_MAIN);
+    lv_obj_add_style(skills4Button, &myButtonStylePR, LV_STATE_PRESSED);
+    lv_obj_set_size(skills4Button, 240, 100);
+    lv_obj_align(skills4Button, LV_ALIGN_TOP_LEFT, 240, 140);
 
-    skills4ButtonLabel = lv_label_create(skills4Button, NULL); //create label and puts it inside of the button
-    lv_label_set_text(skills4ButtonLabel, "Skills 4"); //sets label text
+    skills4ButtonLabel = lv_label_create(skills4Button);
+    lv_label_set_text(skills4ButtonLabel, "Skills 4");
 
     lv_scr_load(saveScreen);
 
@@ -504,25 +504,14 @@ void stormlib::selector::initialize()
     //       and make a box and label in it that the user can input their team 
     //       number into it for the save screen
 
-    saveExit = lv_btn_create(saveScreen, NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(saveExit, LV_BTN_ACTION_CLICK, autonsMenu_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(saveExit, LV_BTN_STYLE_REL, &invisibleStyle); //set the relesed style
-    lv_btn_set_style(saveExit, LV_BTN_STYLE_PR, &invisibleStyle);
+    saveExit = lv_btn_create(saveScreen); //create button, lv_scr_act() is deafult screen object
+    lv_obj_add_event_cb(saveExit, autonsMenu_btn_click_action, LV_EVENT_CLICKED, NULL); //set function to be called on button click
+    lv_obj_add_style(saveExit, &invisibleStyle, LV_PART_MAIN);
+    lv_obj_add_style(saveExit, &invisibleStyle, LV_STATE_PRESSED);
     lv_obj_set_size(saveExit, 480, 240); //set the button size
-    lv_obj_align(saveExit, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0); //set the position to top mid
+    lv_obj_align(saveExit, LV_ALIGN_TOP_LEFT, 0, 0); //set the position to top mid
 
     //----------------------------------------
-
-    lv_scr_load(startScreen);
-
-    lv_obj_t * mbox1 = lv_mbox_create(lv_scr_act(), NULL);
-    lv_mbox_set_text(mbox1, "Did you finish\n"
-                            "the robot"); 
-                                               
-    static const char * btns[] ={"\221Yes!", "\221No :(", ""}; /*Button description. '\221' lv_btnm like control char*/
-    lv_mbox_add_btns(mbox1, btns, mbox_apply_action);
-    lv_obj_set_width(mbox1, 250);
-    lv_obj_align(mbox1, NULL, LV_ALIGN_CENTER, 0, 0); 
 
     lv_scr_load(teamScreen);
 }

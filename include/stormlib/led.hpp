@@ -81,8 +81,6 @@ namespace stormlib {
             */
             void off();
 
-            static void updater();
-
             void bufferShift();
 
             void shiftRight(std::vector<u_int32_t> vec, int x);
