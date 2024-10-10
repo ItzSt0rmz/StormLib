@@ -106,7 +106,7 @@ namespace stormlib {
             const int adiPort, length;
             u_int32_t default_color, tempColor1, tempColor2;
             int speed, mode, shiftValue = 0;
-            std::vector<uint32_t> colors, buffer;
+            std::vector<uint32_t> buffer;
     };
 
     class aRGB_manager {

@@ -84,8 +84,7 @@ std::vector<uint32_t> stormlib::aRGB::genGradient(uint32_t startColor, uint32_t 
  * @param default_color default color for the strand to show if not given an argument
 */
 stormlib::aRGB::aRGB(const int adiPort, const int length) : adiPort(adiPort), length(length), id(leds.size()) {
-    pros::adi::Led led(adiPort, length);
-    leds.push_back(led);
+    leds.emplace_back(adiPort, length);
 }
 
 /**
@@ -138,7 +137,7 @@ void stormlib::aRGB::breathe(uint32_t color) {
 void stormlib::aRGB::bufferShift() {
     if (buffer.size() == 0 || buffer.size() < shiftValue || shiftValue == 0) return;
 
-    std::rotate(buffer.rbegin(), buffer.rbegin() + shiftValue, buffer.rend());
+    //std::rotate(buffer.rbegin(), buffer.rbegin() + shiftValue, buffer.rend());
 }
 
 void stormlib::aRGB::update() {
