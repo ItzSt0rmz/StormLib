@@ -29,7 +29,7 @@ namespace stormlib {
             * @param angularSettings settings for the angular controller
             * @param sensors sensors to be used for odometry
             */
-            void flow(u_int32_t color1, u_int32_t color2, int speed = 5);
+            void flow(u_int32_t color1, u_int32_t color2, int speed = 1);
 
             /**
             * @brief Set the strand to flash a certain color
@@ -105,13 +105,13 @@ namespace stormlib {
 
             static std::vector<pros::adi::Led> leds;
             std::vector<uint32_t> buffer;
+
             int id;
-            
+
         private:
             int adiPort, length;
             u_int32_t default_color, tempColor1, tempColor2;
             int speed, mode, shiftValue = 0;
-            
     };
 
     class aRGB_manager {

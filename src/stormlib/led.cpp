@@ -83,7 +83,7 @@ std::vector<uint32_t> stormlib::aRGB::genGradient(uint32_t startColor, uint32_t 
  * @param LED_strip LED object to be used for strand
  * @param default_color default color for the strand to show if not given an argument
 */
-stormlib::aRGB::aRGB(int adiPort, int length) : adiPort(adiPort), length(length), id(leds.size()) {
+stormlib::aRGB::aRGB(int adiPort, int length) : adiPort(adiPort), length(length) {
 }
 
 /**
@@ -109,7 +109,7 @@ void stormlib::aRGB::setColor(u_int32_t color) {
  * @param 
 */
 void stormlib::aRGB::flow(u_int32_t color1, u_int32_t color2, int speed) {
-    shiftValue = 1;
+    shiftValue = 1 * speed;
     buffer = genGradient(color1, color2, length);
 }
 
@@ -119,7 +119,10 @@ void stormlib::aRGB::flow(u_int32_t color1, u_int32_t color2, int speed) {
  * @param 
 */
 void stormlib::aRGB::flash(u_int32_t color, int speed, u_int32_t color2) {
-    
+    shiftValue = length;
+    buffer.clear();
+    buffer.resize(length, color);
+    buffer.resize(length*speed*2, 0x00000F);
 };
 
 /**
@@ -138,8 +141,6 @@ void stormlib::aRGB::bufferShift() {
 }
 
 void stormlib::aRGB::update() {
-    if (leds.empty()) return;
-
     for (int i = 0; i < leds[id].length(); i++) {
         leds[id].set_pixel(buffer[i], i);
     }
@@ -152,7 +153,8 @@ void stormlib::aRGB::checkLeds() {
 }
 
 void stormlib::aRGB::init() {
-    leds.push_back(pros::adi::Led(adiPort, length));
+    id = leds.size();
+    leds.emplace_back(adiPort, length);
     buffer.resize(length, 0xFFFFFF);
 }
 
@@ -173,10 +175,12 @@ stormlib::aRGB_manager::aRGB_manager(aRGB* strand1, aRGB* strand2, aRGB* strand3
 
 void stormlib::aRGB_manager::updater() {
     while (true) {
+
         for (int i = 0; i < strands.size(); i++) {
             if (strands[i] == nullptr) continue;
             strands[i]->bufferShift();
             strands[i]->update();
+
             pros::delay(20);
         }
     }

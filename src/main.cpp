@@ -2,7 +2,7 @@
 #include "stormlib/led.hpp"
 
 stormlib::aRGB strand1(6, 26);
-stormlib::aRGB strand2(7, 26);
+stormlib::aRGB strand2(7,31);
 stormlib::aRGB strand3(8, 26);
 
 stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP", "5Ring", "Goal Rush", "Disrupt");
@@ -30,7 +30,7 @@ void autonLeft1() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	//autonSelector.initialize();
+	autonSelector.initialize();
 	manager.initialize();
 }
 
@@ -85,6 +85,6 @@ void autonomous() {
  */
 void opcontrol() {
 	strand1.setColor(0x00FFFF);
-	strand2.setColor(0xFFA500);
-	strand3.setColor(0xFFA500);
+	strand2.flow(0xFF0000, 0x0000FF);
+	strand3.flash(0xFFFFFF,3);
 }
