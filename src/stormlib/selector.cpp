@@ -40,8 +40,10 @@ static lv_obj_t * skills3ButtonLabel;
 static lv_obj_t * skills4Button;
 static lv_obj_t * skills4ButtonLabel;
 
-static lv_obj_t * backButton;
-static lv_obj_t * backButtonLabel;
+static lv_obj_t * backButton1;
+static lv_obj_t * backButtonLabel1;
+static lv_obj_t * backButton2;
+static lv_obj_t * backButtonLabel2;
 
 static lv_obj_t * exitButton;
 static lv_obj_t * exitButtonLabel;
@@ -61,6 +63,10 @@ static lv_style_t myButtonStyleREL;
 static lv_style_t myButtonStylePR;  
 static lv_style_t redStyle;
 static lv_style_t blueStyle;
+static lv_style_t redBackStyle;
+static lv_style_t blueBackStyle;
+static lv_style_t blackStyle;
+static lv_style_t whiteStyle;
 static lv_style_t selectedStyle;
 static lv_style_t backStyle;
 static lv_style_t menuStyle1;
@@ -76,7 +82,6 @@ int autonSlot = 1;
 bool stormlib::selector::isRed, stormlib::selector::isLeft, stormlib::selector::isSkills = false;
 bool stormlib::selector::isDefault = true;
 
-
 stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
     this->defaultAuton = defaultAuton;
     this->slot1Name = slot1Name;
@@ -85,9 +90,15 @@ stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char
     this->slot4Name = slot4Name;
 }
 
-void stormlib::selector::resetButtonHighlights() 
-{
-    
+void stormlib::selector::resetButtonHighlights() {
+    lv_obj_add_style(option1Button, &blackStyle, LV_PART_MAIN);
+    lv_obj_add_style(option2Button, &blackStyle, LV_PART_MAIN);
+    lv_obj_add_style(option3Button, &blackStyle, LV_PART_MAIN);
+    lv_obj_add_style(option4Button, &blackStyle, LV_PART_MAIN);
+    lv_obj_add_style(skills1Button, &blackStyle, LV_PART_MAIN);
+    lv_obj_add_style(skills2Button, &blackStyle, LV_PART_MAIN);
+    lv_obj_add_style(skills3Button, &blackStyle, LV_PART_MAIN);
+    lv_obj_add_style(skills4Button, &blackStyle, LV_PART_MAIN);
 }
 
 void stormlib::selector::exitMenu_btn_click_action(lv_event_t * event)
@@ -108,12 +119,16 @@ void stormlib::selector::skillsMenu_btn_click_action(lv_event_t * event)
 void stormlib::selector::red_btn_click_action(lv_event_t * event)
 {
     isRed = true;
+    lv_obj_add_style(backButton1, &redBackStyle, LV_PART_MAIN);
+    lv_obj_add_style(backButton2, &redBackStyle, LV_PART_MAIN);
     lv_scr_load(sideScreen);
 }
 
 void stormlib::selector::blue_btn_click_action(lv_event_t * event)
 {
     isRed = false;
+    lv_obj_add_style(backButton1, &blueBackStyle, LV_PART_MAIN);
+    lv_obj_add_style(backButton2, &blueBackStyle, LV_PART_MAIN);
     lv_scr_load(sideScreen);
 }
 
@@ -131,10 +146,10 @@ void stormlib::selector::right_btn_click_action(lv_event_t * event)
 
 void stormlib::selector::opt1_btn_click_action(lv_event_t * event)
 {
-    lv_obj_t * btn = lv_event_get_target(event);
     isDefault = false;
     autonSlot = 1;
     resetButtonHighlights();
+    lv_obj_add_style(option1Button, &whiteStyle, LV_PART_MAIN);
 }
 
 void stormlib::selector::opt2_btn_click_action(lv_event_t * event)
@@ -142,6 +157,7 @@ void stormlib::selector::opt2_btn_click_action(lv_event_t * event)
     isDefault = false;
     autonSlot = 2;
     resetButtonHighlights();
+    lv_obj_add_style(option2Button, &whiteStyle, LV_PART_MAIN);
 }
 
 void stormlib::selector::opt3_btn_click_action(lv_event_t * event)
@@ -149,6 +165,7 @@ void stormlib::selector::opt3_btn_click_action(lv_event_t * event)
     isDefault = false;
     autonSlot = 3;
     resetButtonHighlights();
+    lv_obj_add_style(option3Button, &whiteStyle, LV_PART_MAIN);
 }
 
 void stormlib::selector::opt4_btn_click_action(lv_event_t * event)
@@ -156,30 +173,35 @@ void stormlib::selector::opt4_btn_click_action(lv_event_t * event)
     isDefault = false;
     autonSlot = 4;
     resetButtonHighlights();
+    lv_obj_add_style(option4Button, &whiteStyle, LV_PART_MAIN);
 }
 
 void stormlib::selector::skl1_btn_click_action(lv_event_t * event)
 {
     autonSlot = 1;
     resetButtonHighlights();
+    lv_obj_add_style(skills1Button, &whiteStyle, LV_PART_MAIN);
 }
 
 void stormlib::selector::skl2_btn_click_action(lv_event_t * event)
 {
     autonSlot = 2;
     resetButtonHighlights();
+    lv_obj_add_style(skills2Button, &whiteStyle, LV_PART_MAIN);
 }
 
 void stormlib::selector::skl3_btn_click_action(lv_event_t * event)
 {
     autonSlot = 3;
     resetButtonHighlights();
+    lv_obj_add_style(skills3Button, &whiteStyle, LV_PART_MAIN);
 }
 
 void stormlib::selector::skl4_btn_click_action(lv_event_t * event)
 {
     autonSlot = 4;
     resetButtonHighlights();
+    lv_obj_add_style(skills4Button, &whiteStyle, LV_PART_MAIN);
 }
 
 void stormlib::selector::back_button_click_action1(lv_event_t * event)
@@ -197,33 +219,33 @@ void stormlib::selector::menuSetup()
 {
     exitButton = lv_btn_create(lv_scr_act()); // create button, lv_scr_act() is default screen object
     lv_obj_add_event_cb(exitButton, exitMenu_btn_click_action, LV_EVENT_CLICKED, NULL); // set function to be called on button click
-    lv_obj_add_style(exitButton, &menuStyle1, LV_INDEV_STATE_PRESSED); // set the released style
-    lv_obj_add_style(exitButton, &menuStyle1, LV_INDEV_STATE_RELEASED); // set the pressed style
+    lv_obj_add_style(exitButton, &menuStyle1, LV_PART_MAIN); // set the released style
     lv_obj_set_size(exitButton, 160, 40); // set the button size
     lv_obj_align(exitButton, LV_ALIGN_TOP_LEFT, 0, 0); // set the position to top mid
 
     exitButtonLabel = lv_label_create(exitButton); // create label and puts it inside of the button
     lv_label_set_text(exitButtonLabel, "Exit"); // sets label text
+    lv_obj_center(exitButtonLabel);
 
     autonsButton = lv_btn_create(lv_scr_act()); // create button, lv_scr_act() is default screen object
     lv_obj_add_event_cb(autonsButton, autonsMenu_btn_click_action, LV_EVENT_CLICKED, NULL); // set function to be called on button click
-    lv_obj_add_style(autonsButton, &menuStyle1, LV_INDEV_STATE_RELEASED); // set the released style
-    lv_obj_add_style(autonsButton, &menuStyle1, LV_STATE_PRESSED); // set the pressed style
+    lv_obj_add_style(autonsButton, &menuStyle1, LV_PART_MAIN); // set the released style
     lv_obj_set_size(autonsButton, 160, 40); // set the button size
     lv_obj_align(autonsButton, LV_ALIGN_TOP_LEFT, 160, 0); // set the position to top mid
 
     autonsButtonLabel = lv_label_create(autonsButton); // create label and puts it inside of the button
     lv_label_set_text(autonsButtonLabel, "Autons"); // sets label text
+    lv_obj_center(autonsButtonLabel);
 
     skillsButton = lv_btn_create(lv_scr_act()); // create button, lv_scr_act() is default screen object
     lv_obj_add_event_cb(skillsButton, skillsMenu_btn_click_action, LV_EVENT_CLICKED, NULL); // set function to be called on button click
-    lv_obj_add_style(skillsButton, &menuStyle1, LV_INDEV_STATE_RELEASED); // set the released style
-    lv_obj_add_style(skillsButton, &menuStyle1, LV_STATE_PRESSED); // set the pressed style
+    lv_obj_add_style(skillsButton, &menuStyle1, LV_PART_MAIN); // set the released style
     lv_obj_set_size(skillsButton, 160, 40); // set the button size
     lv_obj_align(skillsButton, LV_ALIGN_TOP_LEFT, 320, 0); // set the position to top mid
 
     skillsButtonLabel = lv_label_create(skillsButton); // create label and puts it inside of the button
     lv_label_set_text(skillsButtonLabel, "Skills"); // sets label text
+    lv_obj_center(skillsButtonLabel);
 }
 
 
@@ -245,17 +267,28 @@ void stormlib::selector::initialize()
 
     lv_style_init(&redStyle);
     lv_style_set_bg_color(&redStyle, lv_palette_main(LV_PALETTE_RED));
-    lv_style_set_bg_grad_color(&redStyle, lv_palette_main(LV_PALETTE_YELLOW));
     lv_style_set_radius(&redStyle, 0);
     lv_style_set_text_color(&redStyle, lv_color_make(255, 255, 255));
     lv_style_set_border_width(&redStyle, 2);
 
     lv_style_init(&blueStyle);
     lv_style_set_bg_color(&blueStyle, lv_palette_main(LV_PALETTE_BLUE));
-    lv_style_set_bg_grad_color(&blueStyle, lv_palette_main(LV_PALETTE_LIGHT_BLUE));
     lv_style_set_radius(&blueStyle, 0);
     lv_style_set_text_color(&blueStyle, lv_color_make(255, 255, 255));
     lv_style_set_border_width(&blueStyle, 2);
+
+    lv_style_init(&blackStyle);
+    lv_style_set_bg_color(&blackStyle, lv_color_make(0, 0, 0));
+    lv_style_set_radius(&blackStyle, 0);
+    lv_style_set_border_color(&blackStyle, lv_color_make(255, 255, 255));
+    lv_style_set_text_color(&blackStyle, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&blackStyle, 2);
+
+    lv_style_init(&whiteStyle);
+    lv_style_set_bg_color(&whiteStyle, lv_color_make(255, 255, 255));
+    lv_style_set_radius(&whiteStyle, 0);
+    lv_style_set_text_color(&whiteStyle, lv_color_make(0, 0, 0));
+    lv_style_set_border_width(&whiteStyle, 2);
 
     lv_style_init(&selectedStyle);
     lv_style_set_bg_color(&selectedStyle, lv_palette_main(LV_PALETTE_GREY));
@@ -268,6 +301,18 @@ void stormlib::selector::initialize()
     lv_style_set_radius(&backStyle, 10);
     lv_style_set_text_color(&backStyle, lv_color_make(255, 255, 255));
     lv_style_set_border_width(&backStyle, 2);
+
+    lv_style_init(&redBackStyle);
+    lv_style_set_bg_color(&redBackStyle, lv_palette_main(LV_PALETTE_RED));
+    lv_style_set_radius(&redBackStyle, 10);
+    lv_style_set_text_color(&redBackStyle, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&redBackStyle, 2);
+
+    lv_style_init(&blueBackStyle);
+    lv_style_set_bg_color(&blueBackStyle, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_radius(&blueBackStyle, 10);
+    lv_style_set_text_color(&blueBackStyle, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&blueBackStyle, 2);
 
     lv_style_init(&menuStyle1);
     lv_style_set_bg_color(&menuStyle1, lv_palette_main(LV_PALETTE_NONE));
@@ -340,6 +385,7 @@ void stormlib::selector::initialize()
     // Create label for redButton
     redButtonLabel = lv_label_create(redButton); // create label inside button
     lv_label_set_text(redButtonLabel, "Red"); // set label text
+    lv_obj_center(redButtonLabel);
 
     // Create and configure blueButton
     blueButton = lv_btn_create(teamScreen); // create button
@@ -351,6 +397,7 @@ void stormlib::selector::initialize()
     // Create label for blueButton
     blueButtonLabel = lv_label_create(blueButton); // create label inside button
     lv_label_set_text(blueButtonLabel, "Blue"); // set label text
+    lv_obj_center(blueButtonLabel);
 
     // Load the side screen
     lv_scr_load(sideScreen);
@@ -362,32 +409,33 @@ void stormlib::selector::initialize()
 
     leftButton = lv_btn_create(sideScreen); // create button
     lv_obj_add_event_cb(leftButton, left_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
-    lv_obj_add_style(leftButton, &myButtonStyleREL, LV_PART_MAIN); // set released style
-    lv_obj_add_style(leftButton, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_add_style(leftButton, &blackStyle, LV_PART_MAIN); 
     lv_obj_set_size(leftButton, 240, 200); // set button size
     lv_obj_align(leftButton, LV_ALIGN_TOP_LEFT, 0, 40); // set position
 
     leftButtonLabel = lv_label_create(leftButton); // create label inside button
     lv_label_set_text(leftButtonLabel, "Left"); // set label text
+    lv_obj_center(leftButtonLabel);
 
     rightButton = lv_btn_create(sideScreen); // create button
     lv_obj_add_event_cb(rightButton, right_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
-    lv_obj_add_style(rightButton, &myButtonStyleREL, LV_PART_MAIN); // set released style
-    lv_obj_add_style(rightButton, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_add_style(rightButton, &blackStyle, LV_PART_MAIN); 
     lv_obj_set_size(rightButton, 240, 200); // set button size
     lv_obj_align(rightButton, LV_ALIGN_TOP_LEFT, 240, 40); // set position
 
     rightButtonLabel = lv_label_create(rightButton); // create label inside button
     lv_label_set_text(rightButtonLabel, "Right"); // set label text
+    lv_obj_center(rightButtonLabel);
 
-    backButton = lv_btn_create(lv_scr_act()); // create button
-    lv_obj_add_event_cb(backButton, back_button_click_action1, LV_EVENT_CLICKED, NULL); // set click event
-    lv_obj_add_style(backButton, &backStyle, LV_PART_MAIN); // set style
-    lv_obj_set_size(backButton, 100, 60); // set button size
-    lv_obj_align(backButton, LV_ALIGN_CENTER, 0, 20); // set position
+    backButton1 = lv_btn_create(lv_scr_act()); // create button
+    lv_obj_add_event_cb(backButton1, back_button_click_action1, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(backButton1, &backStyle, LV_PART_MAIN); // set style
+    lv_obj_set_size(backButton1, 100, 60); // set button size
+    lv_obj_align(backButton1, LV_ALIGN_CENTER, 0, 20); // set position
 
-    backButtonLabel = lv_label_create(backButton); // create label inside button
-    lv_label_set_text(backButtonLabel, "Back"); // set label text
+    backButtonLabel1 = lv_label_create(backButton1); // create label inside button
+    lv_label_set_text(backButtonLabel1, "Back"); // set label text
+    lv_obj_center(backButtonLabel1);
 
     // Load the option screen
     lv_scr_load(optionScreen);
@@ -398,52 +446,53 @@ void stormlib::selector::initialize()
 
     option1Button = lv_btn_create(optionScreen); // create button
     lv_obj_add_event_cb(option1Button, opt1_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
-    lv_obj_add_style(option1Button, &myButtonStyleREL, LV_PART_MAIN); // set released style
-    lv_obj_add_style(option1Button, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_add_style(option1Button, &blackStyle, LV_PART_MAIN); // set released style
     lv_obj_set_size(option1Button, 240, 100); // set button size
     lv_obj_align(option1Button, LV_ALIGN_TOP_LEFT, 0, 40); // set position
 
     option1ButtonLabel = lv_label_create(option1Button); // create label inside button
     lv_label_set_text(option1ButtonLabel, slot1Name); // set label text
+    lv_obj_center(option1ButtonLabel);
 
     option2Button = lv_btn_create(optionScreen); // create button
     lv_obj_add_event_cb(option2Button, opt2_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
-    lv_obj_add_style(option2Button, &myButtonStyleREL, LV_PART_MAIN); // set released style
-    lv_obj_add_style(option2Button, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_add_style(option2Button, &blackStyle, LV_PART_MAIN); // set released style
     lv_obj_set_size(option2Button, 240, 100); // set button size
     lv_obj_align(option2Button, LV_ALIGN_TOP_LEFT, 240, 40); // set position
 
     option2ButtonLabel = lv_label_create(option2Button); // create label inside button
     lv_label_set_text(option2ButtonLabel, slot2Name); // set label text
+    lv_obj_center(option2ButtonLabel);
 
     option3Button = lv_btn_create(optionScreen); // create button
     lv_obj_add_event_cb(option3Button, opt3_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
-    lv_obj_add_style(option3Button, &myButtonStyleREL, LV_PART_MAIN); // set released style
-    lv_obj_add_style(option3Button, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_add_style(option3Button, &blackStyle, LV_PART_MAIN); // set released style
     lv_obj_set_size(option3Button, 240, 100); // set button size
     lv_obj_align(option3Button, LV_ALIGN_TOP_LEFT, 0, 140); // set position
 
     option3ButtonLabel = lv_label_create(option3Button); // create label inside button
     lv_label_set_text(option3ButtonLabel, slot3Name); // set label text
+    lv_obj_center(option3ButtonLabel);
 
     option4Button = lv_btn_create(optionScreen); // create button
     lv_obj_add_event_cb(option4Button, opt4_btn_click_action, LV_EVENT_CLICKED, NULL); // set click event
-    lv_obj_add_style(option4Button, &myButtonStyleREL, LV_PART_MAIN); // set released style
-    lv_obj_add_style(option4Button, &myButtonStylePR, LV_STATE_PRESSED); // set pressed style
+    lv_obj_add_style(option4Button, &blackStyle, LV_PART_MAIN); // set released style
     lv_obj_set_size(option4Button, 240, 100); // set button size
     lv_obj_align(option4Button, LV_ALIGN_TOP_LEFT, 240, 140); // set position
 
     option4ButtonLabel = lv_label_create(option4Button); // create label inside button
     lv_label_set_text(option4ButtonLabel, slot4Name); // set label text
+    lv_obj_center(option4ButtonLabel);
 
-    backButton = lv_btn_create(lv_scr_act()); // create button
-    lv_obj_add_event_cb(backButton, back_button_click_action2, LV_EVENT_CLICKED, NULL); // set click event
-    lv_obj_add_style(backButton, &backStyle, LV_PART_MAIN); // set released style and pressed style
-    lv_obj_set_size(backButton, 100, 60); // set button size
-    lv_obj_align(backButton, LV_ALIGN_CENTER, 0, 20); // set position
+    backButton2 = lv_btn_create(lv_scr_act()); // create button
+    lv_obj_add_event_cb(backButton2, back_button_click_action2, LV_EVENT_CLICKED, NULL); // set click event
+    lv_obj_add_style(backButton2, &backStyle, LV_PART_MAIN); // set released style and pressed style
+    lv_obj_set_size(backButton2, 100, 60); // set button size
+    lv_obj_align(backButton2, LV_ALIGN_CENTER, 0, 20); // set position
 
-    backButtonLabel = lv_label_create(backButton); // create label inside button
-    lv_label_set_text(backButtonLabel, "Back"); // set label text
+    backButtonLabel2 = lv_label_create(backButton2); // create label inside button
+    lv_label_set_text(backButtonLabel2, "Back"); // set label text
+    lv_obj_center(backButtonLabel2);
 
     lv_scr_load(skillsScreen);
 
@@ -453,52 +502,49 @@ void stormlib::selector::initialize()
 
     skills1Button = lv_btn_create(skillsScreen);
     lv_obj_add_event_cb(skills1Button, skl1_btn_click_action, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_style(skills1Button, &myButtonStyleREL, LV_PART_MAIN);
-    lv_obj_add_style(skills1Button, &myButtonStylePR, LV_STATE_PRESSED);
+    lv_obj_add_style(skills1Button, &blackStyle, LV_PART_MAIN);
     lv_obj_set_size(skills1Button, 240, 100);
     lv_obj_align(skills1Button, LV_ALIGN_TOP_LEFT, 0, 40);
 
     skills1ButtonLabel = lv_label_create(skills1Button);
     lv_label_set_text(skills1ButtonLabel, "Skills 1");
+    lv_obj_center(skills1ButtonLabel);
 
     skills2Button = lv_btn_create(skillsScreen);
     lv_obj_add_event_cb(skills2Button, skl2_btn_click_action, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_style(skills2Button, &myButtonStyleREL, LV_PART_MAIN);
-    lv_obj_add_style(skills2Button, &myButtonStylePR, LV_STATE_PRESSED);
+    lv_obj_add_style(skills2Button, &blackStyle, LV_PART_MAIN);
     lv_obj_set_size(skills2Button, 240, 100);
     lv_obj_align(skills2Button, LV_ALIGN_TOP_LEFT, 240, 40);
 
     skills2ButtonLabel = lv_label_create(skills2Button);
     lv_label_set_text(skills2ButtonLabel, "Skills 2");
+    lv_obj_center(skills2ButtonLabel);
 
     skills3Button = lv_btn_create(skillsScreen);
     lv_obj_add_event_cb(skills3Button, skl3_btn_click_action, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_style(skills3Button, &myButtonStyleREL, LV_PART_MAIN);
-    lv_obj_add_style(skills3Button, &myButtonStylePR, LV_STATE_PRESSED);
+    lv_obj_add_style(skills3Button, &blackStyle, LV_PART_MAIN);
     lv_obj_set_size(skills3Button, 240, 100);
     lv_obj_align(skills3Button, LV_ALIGN_TOP_LEFT, 0, 140);
 
     skills3ButtonLabel = lv_label_create(skills3Button);
     lv_label_set_text(skills3ButtonLabel, "Skills 3");
+    lv_obj_center(skills3ButtonLabel);
 
     skills4Button = lv_btn_create(skillsScreen);
     lv_obj_add_event_cb(skills4Button, skl4_btn_click_action, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_style(skills4Button, &myButtonStyleREL, LV_PART_MAIN);
-    lv_obj_add_style(skills4Button, &myButtonStylePR, LV_STATE_PRESSED);
+    lv_obj_add_style(skills4Button, &blackStyle, LV_PART_MAIN);
     lv_obj_set_size(skills4Button, 240, 100);
     lv_obj_align(skills4Button, LV_ALIGN_TOP_LEFT, 240, 140);
 
     skills4ButtonLabel = lv_label_create(skills4Button);
     lv_label_set_text(skills4ButtonLabel, "Skills 4");
+    lv_obj_center(skills4ButtonLabel);
 
     lv_scr_load(saveScreen);
 
-    /** 
-    LV_IMG_DECLARE(IMG HERE);
-	lv_obj_t *img = lv_img_create(lv_scr_act(), NULL);
-	lv_img_set_src(img, &IMG HERE);
-	lv_obj_align(img, NULL, LV_ALIGN_CENTER, 0, 0);
-    */
+    lv_obj_t *img = lv_img_create(lv_scr_act());
+    lv_img_set_src(img, "C:/Users/theco/Documents/StormLib/src/stormlib/Screen_Saver.bmp");
+    lv_obj_center(img);
 
     // TODO: Make a background screen (have stormlib on it somewhere) 
     //       and make a box and label in it that the user can input their team 
@@ -507,7 +553,6 @@ void stormlib::selector::initialize()
     saveExit = lv_btn_create(saveScreen); //create button, lv_scr_act() is deafult screen object
     lv_obj_add_event_cb(saveExit, autonsMenu_btn_click_action, LV_EVENT_CLICKED, NULL); //set function to be called on button click
     lv_obj_add_style(saveExit, &invisibleStyle, LV_PART_MAIN);
-    lv_obj_add_style(saveExit, &invisibleStyle, LV_STATE_PRESSED);
     lv_obj_set_size(saveExit, 480, 240); //set the button size
     lv_obj_align(saveExit, LV_ALIGN_TOP_LEFT, 0, 0); //set the position to top mid
 

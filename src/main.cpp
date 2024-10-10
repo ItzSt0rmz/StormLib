@@ -85,6 +85,6 @@ void autonomous() {
  */
 void opcontrol() {
 	strand1.rainbow();
-	strand2.flow(0xFF0000, 0x0000FF);
-	strand3.flash(0xFFFFFF,3);
+	strand2.rainbow();
+	strand3.rainbow();
 }

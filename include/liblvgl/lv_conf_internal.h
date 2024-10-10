@@ -2090,7 +2090,7 @@
     #ifdef CONFIG_LV_USE_BMP
         #define LV_USE_BMP CONFIG_LV_USE_BMP
     #else
-        #define LV_USE_BMP 0
+        #define LV_USE_BMP 1
     #endif
 #endif
 
