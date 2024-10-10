@@ -1,9 +1,9 @@
 #include "main.h"
 #include "stormlib/led.hpp"
 
-stormlib::aRGB strand1(8, 26);
+stormlib::aRGB strand1(6, 26);
 stormlib::aRGB strand2(7, 26);
-stormlib::aRGB strand3(6, 26);
+stormlib::aRGB strand3(8, 26);
 
 stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP", "5Ring", "Goal Rush", "Disrupt");
 
@@ -84,7 +84,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	//strand1.setColor(0x00FFFF);
+	strand1.setColor(0x00FFFF);
 	strand2.setColor(0xFFA500);
-	//strand3.flash(0xFFA500);
+	strand3.setColor(0xFFA500);
 }

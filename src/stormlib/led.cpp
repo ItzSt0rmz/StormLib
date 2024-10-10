@@ -10,7 +10,7 @@
 #include "pros/adi.hpp"
 #include "pros/rtos.hpp"
 
-std::vector<pros::adi::Led> stormlib::aRGB::leds; 
+std::vector<pros::adi::Led> stormlib::aRGB::leds;
 
 /**
 * @brief Convert a hex color code to a hexadecimal code
@@ -83,8 +83,7 @@ std::vector<uint32_t> stormlib::aRGB::genGradient(uint32_t startColor, uint32_t 
  * @param LED_strip LED object to be used for strand
  * @param default_color default color for the strand to show if not given an argument
 */
-stormlib::aRGB::aRGB(const int adiPort, const int length) : adiPort(adiPort), length(length), id(leds.size()) {
-    leds.emplace_back(adiPort, length);
+stormlib::aRGB::aRGB(int adiPort, int length) : adiPort(adiPort), length(length), id(leds.size()) {
 }
 
 /**
@@ -99,8 +98,6 @@ void stormlib::aRGB::off() {
 }
 
 void stormlib::aRGB::setColor(u_int32_t color) {
-    if (leds.empty()) pros::lcd::print(0, "LEDS EMPTY>>>>");
-    pros::lcd::print(1, "Strip id: %d", id);
     shiftValue = 0;
     buffer.clear();
     buffer.resize(length, color);
@@ -137,7 +134,7 @@ void stormlib::aRGB::breathe(uint32_t color) {
 void stormlib::aRGB::bufferShift() {
     if (buffer.size() == 0 || buffer.size() < shiftValue || shiftValue == 0) return;
 
-    //std::rotate(buffer.rbegin(), buffer.rbegin() + shiftValue, buffer.rend());
+    std::rotate(buffer.rbegin(), buffer.rbegin() + shiftValue, buffer.rend());
 }
 
 void stormlib::aRGB::update() {
@@ -148,6 +145,15 @@ void stormlib::aRGB::update() {
     }
 
     leds[id].update();
+}
+
+void stormlib::aRGB::checkLeds() {
+    pros::lcd::print(0, "size of leds: %d", leds.size());
+}
+
+void stormlib::aRGB::init() {
+    leds.push_back(pros::adi::Led(adiPort, length));
+    buffer.resize(length, 0xFFFFFF);
 }
 
 // *********************************************************************************************************************************************************
@@ -163,19 +169,25 @@ stormlib::aRGB_manager::aRGB_manager(aRGB* strand1, aRGB* strand2, aRGB* strand3
     strand8(strand8)
 {
     strands = {strand1, strand2, strand3, strand4, strand5, strand6, strand7, strand8};
-    strands.erase(std::remove(strands.begin(), strands.end(), nullptr));
 }
 
 void stormlib::aRGB_manager::updater() {
     while (true) {
         for (int i = 0; i < strands.size(); i++) {
+            if (strands[i] == nullptr) continue;
             strands[i]->bufferShift();
             strands[i]->update();
-            pros::delay(100);
+            pros::delay(20);
         }
     }
 }
 
 void stormlib::aRGB_manager::initialize() {
+    for (int i = 0; i < strands.size(); i++) {
+        if (strands[i] != nullptr) {
+            strands[i]->init();
+        }
+    }
+
     pros::Task task1([&]() { updater(); });
 }

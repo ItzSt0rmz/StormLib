@@ -89,6 +89,10 @@ namespace stormlib {
 
             void update();
 
+            void init();
+
+            static void checkLeds();
+
             /**
             * @brief Creates task for main loop
             *
@@ -100,13 +104,14 @@ namespace stormlib {
             // time_left function (make it static)
 
             static std::vector<pros::adi::Led> leds;
+            std::vector<uint32_t> buffer;
             int id;
             
         private:
-            const int adiPort, length;
+            int adiPort, length;
             u_int32_t default_color, tempColor1, tempColor2;
             int speed, mode, shiftValue = 0;
-            std::vector<uint32_t> buffer;
+            
     };
 
     class aRGB_manager {
