@@ -1,3 +1,4 @@
+#include "liblvgl/misc/lv_color.h"
 #include "main.h"
 #include <string>
 
@@ -55,8 +56,8 @@ static lv_obj_t * teamNum;
 
 static lv_obj_t * startScreen;
 
-static lv_style_t myButtonStyleREL; // released style
-static lv_style_t myButtonStylePR;  // pressed style
+static lv_style_t myButtonStyleREL; 
+static lv_style_t myButtonStylePR;  
 static lv_style_t redStyle;
 static lv_style_t blueStyle;
 static lv_style_t selectedStyle;
@@ -72,6 +73,7 @@ static lv_style_t teamNumStyle;
 
 int autonSlot = 1;
 bool isRed, isLeft, isSkills = false;
+bool isDefault = true;
 
 
 stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
@@ -84,274 +86,246 @@ stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char
 
 void stormlib::selector::resetButtonHighlights() 
 {
-    lv_btn_set_style(option1Button, LV_BTN_STYLE_REL, &myButtonStyleREL);
-    lv_btn_set_style(option2Button, LV_BTN_STYLE_REL, &myButtonStyleREL);
-    lv_btn_set_style(option3Button, LV_BTN_STYLE_REL, &myButtonStyleREL);
-    lv_btn_set_style(option4Button, LV_BTN_STYLE_REL, &myButtonStyleREL);
-    lv_btn_set_style(skills1Button, LV_BTN_STYLE_REL, &myButtonStyleREL);
-    lv_btn_set_style(skills2Button, LV_BTN_STYLE_REL, &myButtonStyleREL);
-    lv_btn_set_style(skills3Button, LV_BTN_STYLE_REL, &myButtonStyleREL);
-    lv_btn_set_style(skills4Button, LV_BTN_STYLE_REL, &myButtonStyleREL);
+    
 }
 
- lv_res_t stormlib::selector::exitMenu_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::exitMenu_btn_click_action(lv_event_t * event)
 {
     lv_scr_load(saveScreen);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::autonsMenu_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::autonsMenu_btn_click_action(lv_event_t * event)
 {
     lv_scr_load(teamScreen);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::skillsMenu_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::skillsMenu_btn_click_action(lv_event_t * event)
 {
     lv_scr_load(skillsScreen);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::red_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::red_btn_click_action(lv_event_t * event)
 {
     isRed = true;
     lv_scr_load(sideScreen);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::blue_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::blue_btn_click_action(lv_event_t * event)
 {
     isRed = false;
     lv_scr_load(sideScreen);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::left_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::left_btn_click_action(lv_event_t * event)
 {
     isLeft = true;
     lv_scr_load(optionScreen);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::right_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::right_btn_click_action(lv_event_t * event)
 {
     isLeft = false;
     lv_scr_load(optionScreen);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::opt1_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::opt1_btn_click_action(lv_event_t * event)
 {
+    lv_obj_t * btn = lv_event_get_target(event);
     isDefault = false;
     autonSlot = 1;
     resetButtonHighlights();
-    lv_btn_set_style(option1Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::opt2_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::opt2_btn_click_action(lv_event_t * event)
 {
     isDefault = false;
     autonSlot = 2;
     resetButtonHighlights();
-    lv_btn_set_style(option2Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::opt3_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::opt3_btn_click_action(lv_event_t * event)
 {
     isDefault = false;
     autonSlot = 3;
     resetButtonHighlights();
-    lv_btn_set_style(option3Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::opt4_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::opt4_btn_click_action(lv_event_t * event)
 {
     isDefault = false;
     autonSlot = 4;
     resetButtonHighlights();
-    lv_btn_set_style(option4Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::skl1_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::skl1_btn_click_action(lv_event_t * event)
 {
     autonSlot = 1;
     resetButtonHighlights();
-    lv_btn_set_style(skills1Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::skl2_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::skl2_btn_click_action(lv_event_t * event)
 {
     autonSlot = 2;
     resetButtonHighlights();
-    lv_btn_set_style(skills2Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::skl3_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::skl3_btn_click_action(lv_event_t * event)
 {
     autonSlot = 3;
     resetButtonHighlights();
-    lv_btn_set_style(skills3Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::skl4_btn_click_action(lv_obj_t * btn)
+void stormlib::selector::skl4_btn_click_action(lv_event_t * event)
 {
     autonSlot = 4;
     resetButtonHighlights();
-    lv_btn_set_style(skills4Button, LV_BTN_STYLE_REL, &selectedStyle);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::back_button_click_action1(lv_obj_t * btn)
+void stormlib::selector::back_button_click_action1(lv_event_t * event)
 {
     lv_scr_load(teamScreen);
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::back_button_click_action2(lv_obj_t * btn)
+void stormlib::selector::back_button_click_action2(lv_event_t * event)
 {
     lv_scr_load(sideScreen);
     resetButtonHighlights();
-    return LV_RES_OK;
 }
 
-lv_res_t stormlib::selector::mbox_apply_action(lv_obj_t * mbox, const char * txt)
+void stormlib::selector::mbox_apply_action(lv_event_t * event)
 {
     lv_scr_load(teamScreen);
-    return LV_RES_OK; /*Return OK if the message box is not deleted*/
 }
 
 void stormlib::selector::menuSetup() 
 {
-    exitButton = lv_btn_create(lv_scr_act(), NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(exitButton, LV_BTN_ACTION_CLICK, exitMenu_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(exitButton, LV_BTN_STYLE_REL, &menuStyle1); //set the relesed style
-    lv_btn_set_style(exitButton, LV_BTN_STYLE_PR, &menuStyle1); //set the pressed style
-    lv_obj_set_size(exitButton, 160, 40); //set the button size
-    lv_obj_align(exitButton, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0); //set the position to top mid
+    exitButton = lv_btn_create(lv_scr_act()); // create button, lv_scr_act() is default screen object
+    lv_obj_add_event_cb(exitButton, exitMenu_btn_click_action, LV_EVENT_CLICKED, NULL); // set function to be called on button click
+    lv_obj_add_style(exitButton, &menuStyle1, LV_STATE_PRESSED); // set the released style
+    lv_obj_add_style(exitButton, &menuStyle1, LV_STATE_PRESSED); // set the pressed style
+    lv_obj_set_size(exitButton, 160, 40); // set the button size
+    lv_obj_align(exitButton, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0); // set the position to top mid
 
-    exitButtonLabel = lv_label_create(exitButton, NULL); //create label and puts it inside of the button
-    lv_label_set_text(exitButtonLabel, "Exit"); //sets label text
+    exitButtonLabel = lv_label_create(exitButton); // create label and puts it inside of the button
+    lv_label_set_text(exitButtonLabel, "Exit"); // sets label text
 
-    autonsButton = lv_btn_create(lv_scr_act(), NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(autonsButton, LV_BTN_ACTION_CLICK, autonsMenu_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(autonsButton, LV_BTN_STYLE_REL, &menuStyle1); //set the relesed style
-    lv_btn_set_style(autonsButton, LV_BTN_STYLE_PR, &menuStyle1); //set the pressed style
-    lv_obj_set_size(autonsButton, 160, 40); //set the button size
-    lv_obj_align(autonsButton, NULL, LV_ALIGN_IN_TOP_LEFT, 160, 0); //set the position to top mid
+    autonsButton = lv_btn_create(lv_scr_act()); // create button, lv_scr_act() is default screen object
+    lv_obj_add_event_cb(autonsButton, autonsMenu_btn_click_action, LV_EVENT_CLICKED, NULL); // set function to be called on button click
+    lv_obj_add_style(autonsButton, &menuStyle1, LV_STATE_RELEASED); // set the released style
+    lv_obj_add_style(autonsButton, &menuStyle1, LV_STATE_PRESSED); // set the pressed style
+    lv_obj_set_size(autonsButton, 160, 40); // set the button size
+    lv_obj_align(autonsButton, NULL, LV_ALIGN_IN_TOP_LEFT, 160, 0); // set the position to top mid
 
-    autonsButtonLabel = lv_label_create(autonsButton, NULL); //create label and puts it inside of the button
-    lv_label_set_text(autonsButtonLabel, "Autons"); //sets label text
+    autonsButtonLabel = lv_label_create(autonsButton); // create label and puts it inside of the button
+    lv_label_set_text(autonsButtonLabel, "Autons"); // sets label text
 
-    skillsButton = lv_btn_create(lv_scr_act(), NULL); //create button, lv_scr_act() is deafult screen object
-    lv_btn_set_action(skillsButton, LV_BTN_ACTION_CLICK, skillsMenu_btn_click_action); //set function to be called on button click
-    lv_btn_set_style(skillsButton, LV_BTN_STYLE_REL, &menuStyle1); //set the relesed style
-    lv_btn_set_style(skillsButton, LV_BTN_STYLE_PR, &menuStyle1); //set the pressed style
-    lv_obj_set_size(skillsButton, 160, 40); //set the button size
-    lv_obj_align(skillsButton, NULL, LV_ALIGN_IN_TOP_LEFT, 320, 0); //set the position to top mid
+    skillsButton = lv_btn_create(lv_scr_act()); // create button, lv_scr_act() is default screen object
+    lv_obj_add_event_cb(skillsButton, skillsMenu_btn_click_action, LV_EVENT_CLICKED, NULL); // set function to be called on button click
+    lv_obj_add_style(skillsButton, &menuStyle1, LV_STATE_RELEASED); // set the released style
+    lv_obj_add_style(skillsButton, &menuStyle1, LV_STATE_PRESSED); // set the pressed style
+    lv_obj_set_size(skillsButton, 160, 40); // set the button size
+    lv_obj_align(skillsButton, NULL, LV_ALIGN_IN_TOP_LEFT, 320, 0); // set the position to top mid
 
-    skillsButtonLabel = lv_label_create(skillsButton, NULL); //create label and puts it inside of the button
-    lv_label_set_text(skillsButtonLabel, "Skills"); //sets label text
+    skillsButtonLabel = lv_label_create(skillsButton); // create label and puts it inside of the button
+    lv_label_set_text(skillsButtonLabel, "Skills"); // sets label text
 }
+
 
 void stormlib::selector::initialize() 
 {
-    lv_style_copy(&myButtonStyleREL, &lv_style_plain);
-    myButtonStyleREL.body.main_color = LV_COLOR_BLUE;
-    myButtonStyleREL.body.grad_color = LV_COLOR_RED;
-    myButtonStyleREL.body.radius = 0;
-    myButtonStyleREL.text.color = LV_COLOR_MAKE(255, 255, 255);
-    myButtonStyleREL.body.border.width = 2;
+    lv_style_init(&myButtonStyleREL);
+    lv_style_set_bg_color(&myButtonStyleREL, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_bg_grad_color(&myButtonStyleREL, lv_palette_main(LV_PALETTE_RED));
+    lv_style_set_radius(&myButtonStyleREL, 0);
+    lv_style_set_text_color(&myButtonStyleREL, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&myButtonStyleREL, 2);
 
-    lv_style_copy(&myButtonStylePR, &lv_style_plain);
-    myButtonStylePR.body.main_color = LV_COLOR_MAKE(255, 0, 0);
-    myButtonStylePR.body.grad_color = LV_COLOR_MAKE(0, 0, 255);
-    myButtonStylePR.body.radius = 0;
-    myButtonStylePR.text.color = LV_COLOR_MAKE(255, 255, 255);
-    myButtonStyleREL.body.border.width = 2;
+    lv_style_init(&myButtonStylePR);
+    lv_style_set_bg_color(&myButtonStylePR, lv_color_make(255, 0, 0));
+    lv_style_set_bg_grad_color(&myButtonStylePR, lv_color_make(0, 0, 255));
+    lv_style_set_radius(&myButtonStylePR, 0);
+    lv_style_set_text_color(&myButtonStylePR, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&myButtonStylePR, 2);
 
-    lv_style_copy(&redStyle, &lv_style_plain);
-    redStyle.body.main_color = LV_COLOR_RED;
-    redStyle.body.grad_color = LV_COLOR_YELLOW;
-    redStyle.body.radius = 0;
-    redStyle.text.color = LV_COLOR_MAKE(255, 255, 255);
-    redStyle.body.border.width = 2;
+    lv_style_init(&redStyle);
+    lv_style_set_bg_color(&redStyle, lv_palette_main(LV_PALETTE_RED));
+    lv_style_set_bg_grad_color(&redStyle, lv_palette_main(LV_PALETTE_YELLOW));
+    lv_style_set_radius(&redStyle, 0);
+    lv_style_set_text_color(&redStyle, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&redStyle, 2);
 
-    lv_style_copy(&blueStyle, &lv_style_plain);
-    blueStyle.body.main_color = LV_COLOR_BLUE;
-    blueStyle.body.grad_color = LV_COLOR_AQUA;
-    blueStyle.body.radius = 0;
-    blueStyle.text.color = LV_COLOR_MAKE(255, 255, 255);
-    blueStyle.body.border.width = 2;
+    lv_style_init(&blueStyle);
+    lv_style_set_bg_color(&blueStyle, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_bg_grad_color(&blueStyle, lv_palette_main(LV_PALETTE_LIGHT_BLUE));
+    lv_style_set_radius(&blueStyle, 0);
+    lv_style_set_text_color(&blueStyle, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&blueStyle, 2);
 
-    lv_style_copy(&selectedStyle, &lv_style_plain);
-    blueStyle.body.main_color = LV_COLOR_GRAY;
-    blueStyle.body.radius = 0;
-    blueStyle.text.color = LV_COLOR_MAKE(255, 255, 255);
-    blueStyle.body.border.width = 2;
+    lv_style_init(&selectedStyle);
+    lv_style_set_bg_color(&selectedStyle, lv_palette_main(LV_PALETTE_GREY));
+    lv_style_set_radius(&selectedStyle, 0);
+    lv_style_set_text_color(&selectedStyle, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&selectedStyle, 2);
 
-    lv_style_copy(&backStyle, &lv_style_plain);
-    backStyle.body.main_color = LV_COLOR_MAKE(0, 0, 0);
-    backStyle.body.radius = 10;
-    backStyle.text.color = LV_COLOR_MAKE(255, 255, 255);
-    backStyle.body.border.width = 2;
+    lv_style_init(&backStyle);
+    lv_style_set_bg_color(&backStyle, lv_color_make(0, 0, 0));
+    lv_style_set_radius(&backStyle, 10);
+    lv_style_set_text_color(&backStyle, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&backStyle, 2);
 
-    lv_style_copy(&menuStyle1, &lv_style_plain);
-    menuStyle1.body.main_color = LV_COLOR_BLACK;
-    menuStyle1.body.grad_color = LV_COLOR_BLACK;
-    menuStyle1.text.color = LV_COLOR_WHITE;
-    menuStyle1.body.border.width = 2;
+    lv_style_init(&menuStyle1);
+    lv_style_set_bg_color(&menuStyle1, lv_palette_main(LV_PALETTE_NONE));
+    lv_style_set_bg_grad_color(&menuStyle1, lv_palette_main(LV_PALETTE_NONE));
+    lv_style_set_text_color(&menuStyle1, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&menuStyle1, 2);
 
-    lv_style_copy(&menuStyle2, &lv_style_plain);
-    menuStyle2.body.main_color = LV_COLOR_WHITE;
-    menuStyle2.body.grad_color = LV_COLOR_WHITE;
-    menuStyle2.text.color = LV_COLOR_BLACK;
-    menuStyle2.body.border.width = 2;
-    
-    lv_style_copy(&style_bg, &lv_style_pretty);
-    style_bg.body.main_color = LV_COLOR_MAKE(0xf5, 0x45, 0x2e);
-    style_bg.body.grad_color = LV_COLOR_MAKE(0xb9, 0x1d, 0x09);
-    style_bg.body.border.color = LV_COLOR_MAKE(0x3f, 0x0a, 0x03);
-    style_bg.text.color = LV_COLOR_WHITE;
-    style_bg.body.padding.hor = 12;
-    style_bg.body.padding.ver = 8;
-    style_bg.body.shadow.width = 8;
+    lv_style_init(&menuStyle2);
+    lv_style_set_bg_color(&menuStyle2, lv_color_make(255, 255, 255));
+    lv_style_set_bg_grad_color(&menuStyle2, lv_color_make(255, 255, 255));
+    lv_style_set_text_color(&menuStyle2, lv_color_make(0, 0, 0));
+    lv_style_set_border_width(&menuStyle2, 2);
 
-    lv_style_copy(&style_btn_rel, &lv_style_btn_rel);
-    style_btn_rel.body.empty = 1;                    /*Draw only the border*/
-    style_btn_rel.body.border.color = LV_COLOR_WHITE;
-    style_btn_rel.body.border.width = 2;
-    style_btn_rel.body.border.opa = LV_OPA_70;
-    style_btn_rel.body.padding.hor = 12;
-    style_btn_rel.body.padding.ver = 8;
+    // Initialize background style
+    lv_style_init(&style_bg);
+    lv_style_set_bg_color(&style_bg, lv_color_make(0xf5, 0x45, 0x2e));
+    lv_style_set_bg_grad_color(&style_bg, lv_color_make(0xb9, 0x1d, 0x09));
+    lv_style_set_border_color(&style_bg, lv_color_make(0x3f, 0x0a, 0x03));
+    lv_style_set_text_color(&style_bg, lv_color_make(255, 255, 255));
+    lv_style_set_pad_hor(&style_bg, 12);
+    lv_style_set_pad_ver(&style_bg, 8);
+    lv_style_set_shadow_width(&style_bg, 8);
 
-    lv_style_copy(&style_btn_pr, &style_btn_rel);
-    style_btn_pr.body.empty = 0;
-    style_btn_pr.body.main_color = LV_COLOR_MAKE(0x5d, 0x0f, 0x04);
-    style_btn_pr.body.grad_color = LV_COLOR_MAKE(0x5d, 0x0f, 0x04);
+    lv_style_init(&style_btn_rel);
+    lv_style_is_empty(&style_btn_rel); // Draw only the border
+    lv_style_set_border_color(&style_btn_rel, lv_color_make(255, 255, 255));
+    lv_style_set_border_width(&style_btn_rel, 2);
+    lv_style_set_border_opa(&style_btn_rel, LV_OPA_70);
+    lv_style_set_pad_hor(&style_btn_rel, 12);
+    lv_style_set_pad_ver(&style_btn_rel, 8);
 
-    lv_style_copy(&invisibleStyle, &lv_style_plain);
-    invisibleStyle.body.empty = true;
+    lv_style_init(&style_btn_pr);
+    lv_style_copy(&style_btn_pr, &style_btn_rel); // Copy released style properties
+    lv_style_set_empty(&style_btn_pr, false);
+    lv_style_set_bg_color(&style_btn_pr, LV_COLOR_MAKE(0x5d, 0x0f, 0x04));
+    lv_style_set_bg_grad_color(&style_btn_pr, LV_COLOR_MAKE(0x5d, 0x0f, 0x04));
+
+    lv_style_init(&invisibleStyle);
+    lv_style_set_empty(&invisibleStyle, true); // Invisible style
+
 
     saveDispStyle.body.radius = 0;    
 
-    teamScreen = lv_obj_create(NULL, NULL);
+    teamScreen = lv_obj_create(NULL);
 
-    sideScreen = lv_obj_create(NULL, NULL);
+    sideScreen = lv_obj_create(NULL);
 
-    optionScreen = lv_obj_create(NULL, NULL);
+    optionScreen = lv_obj_create(NULL);
 
-    skillsScreen = lv_obj_create(NULL, NULL);
+    skillsScreen = lv_obj_create(NULL);
 
-    saveScreen = lv_obj_create(NULL, NULL);
+    saveScreen = lv_obj_create(NULL);
 
-    startScreen = lv_obj_create(NULL, NULL);
+    startScreen = lv_obj_create(NULL);
 
     lv_scr_load(teamScreen);
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pros/adi.hpp"
-#include "display/lvgl.h"
+#include "liblvgl/lvgl.h"
 #include <string>
 
 namespace stormlib {
@@ -47,24 +47,24 @@ namespace stormlib {
             
         private:
 
-            static lv_res_t exitMenu_btn_click_action(lv_obj_t *btn);
-            static lv_res_t autonsMenu_btn_click_action(lv_obj_t *btn);
-            static lv_res_t skillsMenu_btn_click_action(lv_obj_t *btn);
-            static lv_res_t red_btn_click_action(lv_obj_t *btn);
-            static lv_res_t blue_btn_click_action(lv_obj_t *btn);
-            static lv_res_t left_btn_click_action(lv_obj_t *btn);
-            static lv_res_t right_btn_click_action(lv_obj_t *btn);
-            static lv_res_t opt1_btn_click_action(lv_obj_t *btn);
-            static lv_res_t opt2_btn_click_action(lv_obj_t *btn);
-            static lv_res_t opt3_btn_click_action(lv_obj_t *btn);
-            static lv_res_t opt4_btn_click_action(lv_obj_t *btn);
-            static lv_res_t skl1_btn_click_action(lv_obj_t *btn);
-            static lv_res_t skl2_btn_click_action(lv_obj_t *btn);
-            static lv_res_t skl3_btn_click_action(lv_obj_t *btn);
-            static lv_res_t skl4_btn_click_action(lv_obj_t *btn);
-            static lv_res_t back_button_click_action1(lv_obj_t *btn);
-            static lv_res_t back_button_click_action2(lv_obj_t *btn);
-            static lv_res_t mbox_apply_action(lv_obj_t *mbox, const char *txt);
+            static void exitMenu_btn_click_action(lv_event_t * event);
+            static void autonsMenu_btn_click_action(lv_event_t * event);
+            static void skillsMenu_btn_click_action(lv_event_t * event);
+            static void red_btn_click_action(lv_event_t * event);
+            static void blue_btn_click_action(lv_event_t * event);
+            static void left_btn_click_action(lv_event_t * event);
+            static void right_btn_click_action(lv_event_t * event);
+            static void opt1_btn_click_action(lv_event_t * event);
+            static void opt2_btn_click_action(lv_event_t * event);
+            static void opt3_btn_click_action(lv_event_t * event);
+            static void opt4_btn_click_action(lv_event_t * event);
+            static void skl1_btn_click_action(lv_event_t * event);
+            static void skl2_btn_click_action(lv_event_t * event);
+            static void skl3_btn_click_action(lv_event_t * event);
+            static void skl4_btn_click_action(lv_event_t * event);
+            static void back_button_click_action1(lv_event_t * event);
+            static void back_button_click_action2(lv_event_t * event);
+            static void mbox_apply_action(lv_event_t * event);
 
             static void menuSetup();
 
@@ -73,8 +73,5 @@ namespace stormlib {
             int defaultAuton;
             const char *slot1Name,  *slot2Name,  *slot3Name,  *slot4Name;
     };
-
-    bool selector::isRed, selector::isSkills, selector::isLeft = false;
-    bool selector::isDefault = true;
 
 } // namespace stormlib

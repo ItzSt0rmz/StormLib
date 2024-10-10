@@ -85,7 +85,7 @@ namespace stormlib {
 
             void bufferShift();
 
-            void shiftRight(std::vector<u_int32_t>& vec, int x);
+            void shiftRight(std::vector<u_int32_t> vec, int x);
 
             void setColor(uint32_t color);
 
@@ -101,16 +101,14 @@ namespace stormlib {
 
             // time_left function (make it static)
 
-            static std::vector<pros::ADILed> leds;
+            static std::vector<pros::adi::Led> leds;
+            int id;
             
         private:
-            const int adiPort;
-            const int length;
+            const int adiPort, length;
             u_int32_t default_color, tempColor1, tempColor2;
             int speed, mode, shiftValue = 0;
             std::vector<uint32_t> colors, buffer;
-            
-            int id;
     };
 
     class aRGB_manager {

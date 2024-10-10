@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
+#include <iterator>
 #include <vector>
+#include <algorithm>
 #include <list>
 #include <math.h>
 #include "pros/llemu.hpp"
@@ -8,7 +10,7 @@
 #include "pros/adi.hpp"
 #include "pros/rtos.hpp"
 
-std::vector<pros::ADILed> stormlib::aRGB::leds; 
+std::vector<pros::adi::Led> stormlib::aRGB::leds = {}; 
 
 /**
 * @brief Convert a hex color code to a hexadecimal code
@@ -82,7 +84,6 @@ std::vector<uint32_t> stormlib::aRGB::genGradient(uint32_t startColor, uint32_t 
  * @param default_color default color for the strand to show if not given an argument
 */
 stormlib::aRGB::aRGB(const int adiPort, const int length) : adiPort(adiPort), length(length), id(leds.size()) {
-    buffer = {};    
     leds.emplace_back(adiPort, length);
 }
 
@@ -94,17 +95,13 @@ stormlib::aRGB::aRGB(const int adiPort, const int length) : adiPort(adiPort), le
 void stormlib::aRGB::off() {
     shiftValue = 0;
     buffer.clear();
-    for (int i = 0; i < length; i++) {
-        buffer.push_back(0x000000);
-    }
+    buffer.resize(length, 0x00000F);
 }
 
 void stormlib::aRGB::setColor(u_int32_t color) {
     shiftValue = 0;
     buffer.clear();
-    for (int i = 0; i < length; i++) {
-        buffer.push_back(color);
-    }
+    buffer.resize(length, color);
 }
 
 /**
@@ -135,24 +132,29 @@ void stormlib::aRGB::breathe(uint32_t color) {
     
 }
 
-void stormlib::aRGB::shiftRight(std::vector<u_int32_t>& vec, int x) {
-    int n = vec.size();
-    if (n == 0 || x % n == 0) return;
+void stormlib::aRGB::bufferShift() {
+    if (buffer.size() == 0 || buffer.size() < shiftValue || shiftValue == 0) return;
 
-    x = x % n;
-
-    std::rotate(vec.rbegin(), vec.rbegin() + x, vec.rend());
+    //std::rotate(buffer.rbegin(), buffer.rbegin() + shiftValue, buffer.rend());
 }
 
-void stormlib::aRGB::bufferShift() {
-   shiftRight(buffer, shiftValue);
+void stormlib::aRGB::updater() {
+    while (true) {
+		for (int i = 0; i < leds.size(); i++) {
+			leds[i].update();
+	}
+		pros::delay(100);
+	}
 }
 
 void stormlib::aRGB::update() {
-    for (int i = 0; i < length; i++) {
-        leds.at(id).set_pixel(buffer.at(i), i);
+
+    if (leds.empty()) return;
+    
+    for (int i = 0; i < leds[id].length(); i++) {
+        leds[id][i] = buffer[i];
     }
-    leds.at(id).update();
+
 }
 
 // *********************************************************************************************************************************************************
@@ -166,21 +168,22 @@ stormlib::aRGB_manager::aRGB_manager(aRGB* strand1, aRGB* strand2, aRGB* strand3
     strand6(strand6),
     strand7(strand7),
     strand8(strand8)
-    {
-        strands = {strand1, strand2, strand3, strand4, strand5, strand6, strand7, strand8};
-    }
-
-void stormlib::aRGB_manager::initialize() {
-    pros::Task ledUpdater([&]() { updater(); });
+{
+    strands = {strand1, strand2, strand3, strand4, strand5, strand6, strand7, strand8};
+    strands.erase(std::remove(strands.begin(), strands.end(), nullptr));
 }
 
 void stormlib::aRGB_manager::updater() {
     while (true) {
-        for (auto strand : strands) {
-            strand->bufferShift();
-            strand->update();
+        for (int i = 0; i < strands.size(); i++) {
+            strands[i]->bufferShift();
+            strands[i]->update();
+            pros::delay(100);
         }
-
-        pros::delay(50);
     }
+}
+
+void stormlib::aRGB_manager::initialize() {
+    pros::Task task1([&]() { updater(); });
+    pros::Task task2([&]() { stormlib::aRGB::updater(); });
 }

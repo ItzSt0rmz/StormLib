@@ -2,14 +2,13 @@
 #include "stormlib/led.hpp"
 
 stormlib::aRGB strand1(8, 26);
-stormlib::aRGB strand2(7, 26);
-stormlib::aRGB strand3(6, 26);
+
 stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP", "5Ring", "Goal Rush", "Disrupt");
 
 stormlib::aRGB_manager manager(
 	&strand1,
-	&strand2,
-	&strand3,
+	nullptr,
+	nullptr,
 	nullptr,
 	nullptr,
 	nullptr,
@@ -28,7 +27,7 @@ void autonLeft1() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
+	//pros::lcd::initialize();
 	autonSelector.initialize();
 	manager.initialize();
 }
