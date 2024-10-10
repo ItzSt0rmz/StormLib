@@ -134,6 +134,57 @@ void stormlib::aRGB::breathe(uint32_t color) {
     
 }
 
+void stormlib::aRGB::rainbow(int speed) {
+    shiftValue = 1 * speed;
+    buffer = genRainbow(length);
+}
+
+std::vector<uint32_t> stormlib::aRGB::genRainbow(int length) {
+    std::vector<uint32_t> rainbowColors;
+    
+    for (int i = 0; i < length; ++i) {
+        // Calculate the hue based on the position in the vector
+        float hue = static_cast<float>(i) / length * 360.0f;
+        
+        // Convert hue to RGB
+        float r, g, b;
+        if (hue < 60) {
+            r = hue / 60;
+            g = 1;
+            b = 0;
+        } else if (hue < 120) {
+            r = 1;
+            g = 1 - (hue - 60) / 60;
+            b = 0;
+        } else if (hue < 180) {
+            r = 0;
+            g = 1;
+            b = (hue - 120) / 60;
+        } else if (hue < 240) {
+            r = 0;
+            g = 1 - (hue - 180) / 60;
+            b = 1;
+        } else if (hue < 300) {
+            r = (hue - 240) / 60;
+            g = 0;
+            b = 1;
+        } else {
+            r = 1;
+            g = 0;
+            b = 1 - (hue - 300) / 60;
+        }
+
+        // Convert RGB to uint32_t
+        uint32_t color = (static_cast<uint32_t>(r * 255) << 16) |
+                         (static_cast<uint32_t>(g * 255) << 8) |
+                         (static_cast<uint32_t>(b * 255));
+
+        rainbowColors.push_back(color);
+    }
+
+    return rainbowColors;
+}
+
 void stormlib::aRGB::bufferShift() {
     if (buffer.size() == 0 || buffer.size() < shiftValue || shiftValue == 0) return;
 

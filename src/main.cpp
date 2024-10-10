@@ -84,7 +84,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	strand1.setColor(0x00FFFF);
+	strand1.rainbow();
 	strand2.flow(0xFF0000, 0x0000FF);
 	strand3.flash(0xFFFFFF,3);
 }

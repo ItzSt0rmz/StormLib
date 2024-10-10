@@ -31,6 +31,8 @@ namespace stormlib {
             */
             void flow(u_int32_t color1, u_int32_t color2, int speed = 1);
 
+            void rainbow(int speed = 1);
+
             /**
             * @brief Set the strand to flash a certain color
             *
@@ -73,6 +75,8 @@ namespace stormlib {
             * @param size Size of gradient, use the length of the LED string
             */
             static std::vector<uint32_t> genGradient(uint32_t startColor, uint32_t endColor, size_t length);
+            
+            static std::vector<uint32_t> genRainbow(int length);
 
             /**
             * @brief Turn off the RGB
