@@ -246,3 +246,43 @@ void stormlib::aRGB_manager::initialize() {
 
     pros::Task task1([&]() { updater(); });
 }
+
+void stormlib::aRGB_manager::rainbow(int speed) {
+    for (int i = 0; i < strands.size(); i++) {
+        if (strands[i] != nullptr) {
+            strands[i]->rainbow(speed);
+        }
+    }
+}
+
+void stormlib::aRGB_manager::off() {
+    for (int i = 0; i < strands.size(); i++) {
+        if (strands[i] != nullptr) {
+            strands[i]->off();
+        }
+    }
+}
+
+void stormlib::aRGB_manager::setColor(u_int32_t color) {
+    for (int i = 0; i < strands.size(); i++) {
+        if (strands[i] != nullptr) {
+            strands[i]->setColor(color);
+        }
+    }
+}
+
+void stormlib::aRGB_manager::flash(u_int32_t color, int speed = 5, u_int32_t color2 = 0x000000) {
+    for (int i = 0; i < strands.size(); i++) {
+        if (strands[i] != nullptr) {
+            strands[i]->flash(color, speed, color2);
+        }
+    }
+}
+
+void stormlib::aRGB_manager::flow(u_int32_t color1, u_int32_t color2, int speed = 1) {
+    for (int i = 0; i < strands.size(); i++) {
+        if (strands[i] != nullptr) {
+            strands[i]->flow(color1, color2, speed);
+        }
+    }
+}

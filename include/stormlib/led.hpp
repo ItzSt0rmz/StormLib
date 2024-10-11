@@ -125,6 +125,12 @@ namespace stormlib {
             void initialize();
             void updater();
 
+            void rainbow(int speed = 5);
+            void flow(u_int32_t color1, u_int32_t color2, int speed = 1);
+            void flash(u_int32_t color, int speed = 5, u_int32_t color2 = 0x000000);
+            void setColor(u_int32_t color);
+            void off();
+
         private:
             aRGB *strand1, *strand2, *strand3, *strand4, *strand5, *strand6, *strand7, *strand8;
             std::vector<aRGB*> strands;
