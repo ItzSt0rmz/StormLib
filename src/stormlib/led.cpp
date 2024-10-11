@@ -271,7 +271,7 @@ void stormlib::aRGB_manager::setColor(u_int32_t color) {
     }
 }
 
-void stormlib::aRGB_manager::flash(u_int32_t color, int speed = 5, u_int32_t color2 = 0x000000) {
+void stormlib::aRGB_manager::flash(u_int32_t color, int speed, u_int32_t color2) {
     for (int i = 0; i < strands.size(); i++) {
         if (strands[i] != nullptr) {
             strands[i]->flash(color, speed, color2);
@@ -279,7 +279,7 @@ void stormlib::aRGB_manager::flash(u_int32_t color, int speed = 5, u_int32_t col
     }
 }
 
-void stormlib::aRGB_manager::flow(u_int32_t color1, u_int32_t color2, int speed = 1) {
+void stormlib::aRGB_manager::flow(u_int32_t color1, u_int32_t color2, int speed) {
     for (int i = 0; i < strands.size(); i++) {
         if (strands[i] != nullptr) {
             strands[i]->flow(color1, color2, speed);
