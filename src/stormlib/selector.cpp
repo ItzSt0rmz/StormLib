@@ -95,6 +95,10 @@ stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char
 
 // TODO: void stormlib::selector::registerSaveScreen() {}
 
+void stormlib::selector::loadSaveScreen() {
+    lv_scr_load(saveScreen);
+}
+
 void stormlib::selector::resetButtonHighlights() {
     lv_obj_add_style(option1Button, &blackStyle, LV_PART_MAIN);
     lv_obj_add_style(option2Button, &blackStyle, LV_PART_MAIN);
