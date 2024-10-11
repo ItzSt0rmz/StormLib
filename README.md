@@ -2,7 +2,17 @@
 Hey there! StormLib is a template built for PROS 4 that includes LED control and an auton selector. For installation details, see the [Releases](https://github.com/ItzSt0rmz/StormLib/releases) page.
 
 # LEDs
-To physically make and LED strand, you need a 
+
+## Hardware
+> **Note**: You will need to be able to solder to make LED strips work with the brain.
+
+To physically make and LED strand, you need a ws2812b LED strip. Ideally, it should be the 3.2 ft / 144 LEDs version. I have found succes with [these](https://www.amazon.com/LOAMLIN-WS2812B-Individually-Addressable-Waterproof/dp/B0BDS7NHQM/ref=sr_1_1_sspa?crid=3QMI9YVXRJ2PC&dib=eyJ2IjoiMSJ9.mlyNyKu8sW0HjM47ymHDzEoFGXABafTwodGXpzt9VwI-Lv8LFS2u9yhH3BhA2Iwf570mAY4Ekyexp1H5W5RJWK3aMbZSfJYFwXSIwvYHNLbljmZfGRvuHppLttSrjQ3SZqhybXdSesw3p_CfC1Ew92qXghKaDi4X59g48a-ebQAcGYDuKsucng5k_89eOIewr568RB15qNSmQ6VtADMjS9qBByOqL5m592_0AjCXj5ISq4WEAAtE1Nk9f57PaQEhKthh33rfUSNlL87D0NNGItlc_Pi_Z69DmE6U8X5mavQ.-1wO_W9skZxd1iY8jUoIQ9bATbgxqLLgguVxvFfZndg&dib_tag=se&keywords=ws2812b&qid=1728614690&sprefix=ws%2Caps%2C146&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1).
+
+Once you have a roll of LEDs, you will clip the size you want, then wire up a vex 3-wire cable according to the following diagram:
+
+> **WARNING**: PLEASE, ATTACH THE WIRES ON THE SIDE THAT THE ARROWS POINT AWAY!!!!
+
+## Software
 LEDs are constructed as: 
 <br>
 `stormlib::aRGB name(adiPort, length);`
