@@ -10,7 +10,7 @@ stormlib::aRGB strand3(8, 26);
 
 stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP", "5Ring", "Goal Rush", "Disrupt");
 
-stormlib::aRGB_manager manager(
+stormlib::aRGB_manager LEDmanager(
 	&strand1,
 	&strand2,
 	&strand3,
@@ -33,7 +33,7 @@ void autonLeft1() {
  */
 void initialize() {
 	autonSelector.initialize();
-	manager.initialize();
+	LEDmanager.initialize();
 }
 
 /**
@@ -66,10 +66,10 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	int auton = autonSelector.getAuton();
+	if (autonSelector.getAuton() == 0) autonLeft1(); // put default auton here
 
-	if (auton == 0) autonLeft1(); // put default auton here
-	if (auton == stormlib::selector::E_BLUE_LEFT_1) autonLeft1();
+	// register autons - if (autonSelector.getAuton() == ENUMERATED SLOT VALUE) {function here}
+	if (autonSelector.getAuton() == stormlib::selector::E_BLUE_LEFT_1) autonLeft1();
 }
 
 /**
@@ -86,9 +86,12 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	strand1.rainbow();
-	strand2.rainbow();
-	strand3.rainbow();
 
+	autonSelector.loadSaveScreen(); // loads the save screen 
 
+	strand1.rainbow(); // rainbow flows down strand
+	strand2.flow(0x00FFFF, 0xFFFF00); // gradient between two colors flows down strand
+	strand3.setColor(0x00FFFF); // strand stays on one color
+
+	LEDmanager.flash(0x00FFFF); // sets all the strands to flash a color
 }
