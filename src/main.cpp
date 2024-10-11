@@ -2,6 +2,7 @@
 #include "liblvgl/core/lv_disp.h"
 #include "liblvgl/core/lv_obj_pos.h"
 #include "liblvgl/widgets/lv_img.h"
+#include "pros/rtos.hpp"
 #include "stormlib/led.hpp"
 
 stormlib::aRGB strand1(6, 26);
@@ -87,11 +88,17 @@ void autonomous() {
  */
 void opcontrol() {
 
+	stormlib::clock driverClock;
+
+	driverClock.start();
+
+	driverClock.waitUntil(100000);
+
 	autonSelector.loadSaveScreen(); // loads the save screen 
 
 	strand1.rainbow(); // rainbow flows down strand
 	strand2.flow(0x00FFFF, 0xFFFF00); // gradient between two colors flows down strand
 	strand3.setColor(0x00FFFF); // strand stays on one color
 
-	LEDmanager.flash(0x00FFFF); // sets all the strands to flash a color
+	//LEDmanager.flash(0x00FFFF); // sets all the strands to flash a color
 }
