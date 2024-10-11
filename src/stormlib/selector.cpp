@@ -1,4 +1,6 @@
 #include "led.hpp"
+#include "liblvgl/widgets/lv_img.h"
+#include "liblvgl/widgets/lv_label.h"
 #include "main.h"
 #include "selector.hpp"
 #include <string>
@@ -54,8 +56,7 @@ static lv_obj_t * skillsButtonLabel;
 
 static lv_obj_t * saveScreen;
 static lv_obj_t * saveExit;
-static lv_obj_t * saveDisp;
-static lv_obj_t * teamNum;
+static lv_obj_t * saveLabel;
 
 static lv_obj_t * startScreen;
 
@@ -82,6 +83,8 @@ int autonSlot = 1;
 bool stormlib::selector::isRed, stormlib::selector::isLeft, stormlib::selector::isSkills = false;
 bool stormlib::selector::isDefault = true;
 
+LV_IMG_DECLARE(Screen_Saver);
+
 stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
     this->defaultAuton = defaultAuton;
     this->slot1Name = slot1Name;
@@ -89,6 +92,8 @@ stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char
     this->slot3Name = slot3Name;
     this->slot4Name = slot4Name;
 }
+
+// TODO: void stormlib::selector::registerSaveScreen() {}
 
 void stormlib::selector::resetButtonHighlights() {
     lv_obj_add_style(option1Button, &blackStyle, LV_PART_MAIN);
@@ -542,9 +547,9 @@ void stormlib::selector::initialize()
 
     lv_scr_load(saveScreen);
 
-    lv_obj_t *img = lv_img_create(lv_scr_act());
-    lv_img_set_src(img, "C:/Users/theco/Documents/StormLib/src/stormlib/Screen_Saver.bmp");
-    lv_obj_center(img);
+    lv_obj_t * img = lv_img_create(lv_scr_act());
+	lv_img_set_src(img, &Screen_Saver);
+	lv_obj_center(img);
 
     // TODO: Make a background screen (have stormlib on it somewhere) 
     //       and make a box and label in it that the user can input their team 
@@ -555,6 +560,8 @@ void stormlib::selector::initialize()
     lv_obj_add_style(saveExit, &invisibleStyle, LV_PART_MAIN);
     lv_obj_set_size(saveExit, 480, 240); //set the button size
     lv_obj_align(saveExit, LV_ALIGN_TOP_LEFT, 0, 0); //set the position to top mid
+
+
 
     //----------------------------------------
 

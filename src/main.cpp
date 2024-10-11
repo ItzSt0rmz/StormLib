@@ -1,4 +1,7 @@
 #include "main.h"
+#include "liblvgl/core/lv_disp.h"
+#include "liblvgl/core/lv_obj_pos.h"
+#include "liblvgl/widgets/lv_img.h"
 #include "stormlib/led.hpp"
 
 stormlib::aRGB strand1(6, 26);
@@ -29,7 +32,6 @@ void autonLeft1() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
 	autonSelector.initialize();
 	manager.initialize();
 }
@@ -87,4 +89,6 @@ void opcontrol() {
 	strand1.rainbow();
 	strand2.rainbow();
 	strand3.rainbow();
+
+
 }

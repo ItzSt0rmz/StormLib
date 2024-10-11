@@ -16,6 +16,8 @@ namespace stormlib {
 
             void initialize();
 
+            //void registerSaveScreen();
+
             static int getAuton();
 
             static bool isAllianceRed();
