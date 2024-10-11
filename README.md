@@ -10,6 +10,9 @@ To physically make and LED strand, you need a ws2812b LED strip. Ideally, it sho
 
 Once you have a roll of LEDs, you will clip the size you want, then wire up a vex 3-wire cable according to the following diagram:
 
+![LEDwiringdiagram](https://github.com/user-attachments/assets/472b7a1e-f3a8-4127-a1ea-fa88f478a0f2)
+Credit: Sylvie
+
 > **WARNING**: PLEASE, ATTACH THE WIRES ON THE SIDE THAT THE ARROWS POINT AWAY!!!!
 
 ## Software
