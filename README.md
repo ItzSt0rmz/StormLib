@@ -1,6 +1,8 @@
 # Intro
 StormLib is a template built for PROS 4 that includes LED control and an auton selector. For installation details, see the [Releases](https://github.com/ItzSt0rmz/StormLib/releases) page.
 
+<img src="https://img.shields.io/github/downloads/ItzSt0rmz/StormLib/total?style=for-the-badge">
+
 # LEDs
 
 ## Hardware
@@ -66,5 +68,3 @@ A default auton can be set using the form:
 
 # Contributing
 If you want to see a feature, feel free to open a pull request!
-
-<img src="https://img.shields.io/github/downloads/ItzSt0rmz/StormLib/total?style=for-the-badge">
