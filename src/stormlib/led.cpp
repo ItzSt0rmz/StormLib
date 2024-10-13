@@ -240,6 +240,7 @@ void stormlib::aRGB_manager::updater() {
 void stormlib::aRGB_manager::initialize() {
     for (int i = 0; i < strands.size(); i++) {
         if (strands[i] != nullptr) {
+            strands[i]->setColor(0x00ff00);
             strands[i]->init();
         }
     }
