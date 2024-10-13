@@ -10,7 +10,7 @@ StormLib is a template built for PROS 4 that includes LED control and an auton s
 
 To physically make and LED strand, you need a ws2812b LED strip. Ideally, it should be the 3.2 ft / 144 LEDs version. I have found succes with [these](https://www.amazon.com/LOAMLIN-WS2812B-Individually-Addressable-Waterproof/dp/B0BDS7NHQM/ref=sr_1_1_sspa?crid=3QMI9YVXRJ2PC&dib=eyJ2IjoiMSJ9.mlyNyKu8sW0HjM47ymHDzEoFGXABafTwodGXpzt9VwI-Lv8LFS2u9yhH3BhA2Iwf570mAY4Ekyexp1H5W5RJWK3aMbZSfJYFwXSIwvYHNLbljmZfGRvuHppLttSrjQ3SZqhybXdSesw3p_CfC1Ew92qXghKaDi4X59g48a-ebQAcGYDuKsucng5k_89eOIewr568RB15qNSmQ6VtADMjS9qBByOqL5m592_0AjCXj5ISq4WEAAtE1Nk9f57PaQEhKthh33rfUSNlL87D0NNGItlc_Pi_Z69DmE6U8X5mavQ.-1wO_W9skZxd1iY8jUoIQ9bATbgxqLLgguVxvFfZndg&dib_tag=se&keywords=ws2812b&qid=1728614690&sprefix=ws%2Caps%2C146&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1).
 
-Once you have a roll of LEDs, you will clip the size you want, then wire up a vex 3-wire cable according to the following diagram:
+Once you have a roll of LEDs, you will clip the size you want, then solder it to a vex 3-wire cable according to the following diagram:
 
 ![LEDwiringdiagram](https://github.com/user-attachments/assets/472b7a1e-f3a8-4127-a1ea-fa88f478a0f2)
 Credit: Sylvie
