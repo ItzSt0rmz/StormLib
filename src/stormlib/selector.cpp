@@ -618,3 +618,12 @@ int stormlib::selector::getAuton() {
 bool stormlib::selector::isAllianceRed() {
     return isRed;
 }
+
+void stormlib::selector::setAllianceColorRed(bool allianceIsRed) {
+    if (allianceIsRed) {
+        isRed = true;
+    }
+    else {
+        isRed = false;
+    }
+}

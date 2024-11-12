@@ -24,6 +24,8 @@ namespace stormlib {
 
             static bool isAllianceRed();
 
+            void setAllianceColorRed(bool allianceIsRed);
+
             enum AUTON_SLOTS { 
                 E_RED_RIGHT_1 = 1, 
                 E_RED_RIGHT_2 = 2, 
