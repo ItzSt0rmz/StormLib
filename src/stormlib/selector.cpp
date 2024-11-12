@@ -83,7 +83,7 @@ int autonSlot = 1;
 bool stormlib::selector::isRed, stormlib::selector::isLeft, stormlib::selector::isSkills = false;
 bool stormlib::selector::isDefault = true;
 
-LV_IMG_DECLARE(Screen_Saver);
+LV_IMG_DECLARE(Screen_Saver_96504D);
 
 stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
     this->defaultAuton = defaultAuton;
@@ -552,7 +552,7 @@ void stormlib::selector::initialize()
     lv_scr_load(saveScreen);
 
     lv_obj_t * img = lv_img_create(lv_scr_act());
-	lv_img_set_src(img, &Screen_Saver);
+	lv_img_set_src(img, &Screen_Saver_96504D);
 	lv_obj_center(img);
 
     // TODO: Make a background screen (have stormlib on it somewhere) 

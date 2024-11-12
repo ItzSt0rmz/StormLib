@@ -245,7 +245,7 @@ void stormlib::aRGB_manager::initialize() {
         }
     }
 
-    pros::Task task1([&]() { updater(); });
+    pros::Task LED_MANAGER_TASK([&]() { updater(); });
 }
 
 void stormlib::aRGB_manager::rainbow(int speed) {

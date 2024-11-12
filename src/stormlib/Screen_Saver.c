@@ -12,7 +12,6 @@
     #include "liblvgl/lvgl.h"
 #endif
 
-
 #ifndef LV_ATTRIBUTE_IMG_SCREEN_SAVER
 #define LV_ATTRIBUTE_IMG_SCREEN_SAVER
 #endif
