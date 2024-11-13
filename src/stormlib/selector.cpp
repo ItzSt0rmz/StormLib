@@ -84,13 +84,15 @@ bool stormlib::selector::isRed, stormlib::selector::isLeft, stormlib::selector::
 bool stormlib::selector::isDefault = true;
 
 LV_IMG_DECLARE(Screen_Saver_96504D);
+LV_IMG_DECLARE(Screen_Saver);
 
-stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name) {
+stormlib::selector::selector(int defaultAuton, const char* slot1Name, const char* slot2Name, const char* slot3Name, const char* slot4Name, bool is96504D) {
     this->defaultAuton = defaultAuton;
     this->slot1Name = slot1Name;
     this->slot2Name = slot2Name;
     this->slot3Name = slot3Name;
     this->slot4Name = slot4Name;
+    this->is96504D =is96504D;
 }
 
 // TODO: void stormlib::selector::registerSaveScreen() {}
@@ -552,7 +554,10 @@ void stormlib::selector::initialize()
     lv_scr_load(saveScreen);
 
     lv_obj_t * img = lv_img_create(lv_scr_act());
-	lv_img_set_src(img, &Screen_Saver_96504D);
+    
+	if (is96504D) lv_img_set_src(img, &Screen_Saver_96504D);
+    else lv_img_set_src(img, &Screen_Saver);
+    
 	lv_obj_center(img);
 
     // TODO: Make a background screen (have stormlib on it somewhere) 

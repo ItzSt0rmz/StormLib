@@ -12,7 +12,7 @@ namespace stormlib {
     class selector{
 
         public:
-            selector(int defaultAuton, const char* slot1Name = "AWP", const char* slot2Name = "SAFE", const char* slot3Name = "RUSH", const char* slot4Name = "MISC");
+            selector(int defaultAuton, const char* slot1Name = "AWP", const char* slot2Name = "SAFE", const char* slot3Name = "RUSH", const char* slot4Name = "MISC", bool is96504D = false);
 
             void initialize();
 
@@ -77,6 +77,7 @@ namespace stormlib {
 
             int defaultAuton;
             const char *slot1Name,  *slot2Name,  *slot3Name,  *slot4Name;
+            bool is96504D;
     };
 
 } // namespace stormlib
