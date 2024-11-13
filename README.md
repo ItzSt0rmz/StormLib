@@ -1,5 +1,7 @@
 # Intro
-StormLib is a template built for PROS 4 that includes LED control and an auton selector. For installation details, see the [Releases](https://github.com/ItzSt0rmz/StormLib/releases) page.
+StormLib is a template built for PROS 4 that includes LED control and an auton selector. For installation details, see the [Releases](https://github.com/ItzSt0rmz/StormLib/releases) page. 
+
+Have any questions or feature requests, join the discord: [https://discord.gg/vTmMG3dAX6](https://discord.gg/vTmMG3dAX6)
 
 <img src="https://img.shields.io/github/downloads/ItzSt0rmz/StormLib/total?style=for-the-badge">
 
