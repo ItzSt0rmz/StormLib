@@ -17,7 +17,8 @@ Once you have a roll of LEDs, you will clip the size you want (must be less than
 ![LEDwiringdiagram](https://github.com/user-attachments/assets/472b7a1e-f3a8-4127-a1ea-fa88f478a0f2)
 Credit: Sylvie
 
-> **WARNING**: PLEASE, ATTACH THE WIRES ON THE SIDE THAT THE ARROWS POINT AWAY!!!!
+> [!NOTE]  
+> If you don't want to solder the LEDs yourself, you can order them from the_storm_cloud on Discord.
 
 ## Software
 LEDs are constructed as: 
