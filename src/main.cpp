@@ -10,22 +10,13 @@ stormlib::aRGB strand2(6, 41);
 stormlib::aRGB strand3(7, 41);
 stormlib::aRGB strand4(8, 41);
 
-stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP", "5Ring", "Goal Rush", "Disrupt");
+stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP",
+                                 "5Ring", "Goal Rush", "Disrupt");
 
-stormlib::aRGB_manager LEDmanager(
-	&strand1,
-	&strand2,
-	&strand3,
-	&strand4,
-	nullptr,
-	nullptr,
-	nullptr,
-	nullptr
-);
+stormlib::aRGB_manager LEDmanager(&strand1, &strand2, &strand3, &strand4,
+                                  nullptr, nullptr, nullptr, nullptr);
 
-void autonLeft1() {
-
-} 
+void autonLeft1() {}
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -34,8 +25,8 @@ void autonLeft1() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	autonSelector.initialize();
-	LEDmanager.initialize();
+  autonSelector.initialize();
+  LEDmanager.initialize();
 }
 
 /**
@@ -68,10 +59,13 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	if (autonSelector.getAuton() == 0) autonLeft1(); // put default auton here
+  if (autonSelector.getAuton() == 0)
+    autonLeft1(); // put default auton here
 
-	// register autons - if (autonSelector.getAuton() == ENUMERATED SLOT VALUE) {function here}
-	if (autonSelector.getAuton() == stormlib::selector::E_BLUE_LEFT_1) autonLeft1();
+  // register autons - if (autonSelector.getAuton() == ENUMERATED SLOT VALUE)
+  // {function here}
+  if (autonSelector.getAuton() == stormlib::selector::E_BLUE_LEFT_1)
+    autonLeft1();
 }
 
 /**
@@ -89,22 +83,23 @@ void autonomous() {
  */
 void opcontrol() {
 
-	stormlib::clock driverClock;
+  stormlib::clock driverClock;
 
-	driverClock.start();
+  driverClock.start();
 
-	driverClock.waitUntil(100 * 1000);
+  driverClock.waitUntil(100 * 1000);
 
-	autonSelector.loadSaveScreen(); // loads the save screen 
+  autonSelector.loadSaveScreen(); // loads the save screen
 
-	strand1.rainbow(); // rainbow flows down strand
-	strand2.flow(0x00FFFF, 0xFFFF00); // gradient between two colors flows down strand
-	strand3.setColor(0x00FFFF); // strand stays on one color
-	strand4.flash(0xFF0000);
+  strand1.rainbow(); // rainbow flows down strand
+  strand2.flow(0x00FFFF,
+               0xFFFF00);     // gradient between two colors flows down strand
+  strand3.setColor(0x00FFFF); // strand stays on one color
+  strand4.flash(0xFF0000);
 
-	driverClock.waitUntil(90 * 1000);
+  driverClock.waitUntil(90 * 1000);
 
-	LEDmanager.rainbow();
+  LEDmanager.rainbow();
 
-	//LEDmanager.flash(0x00FFFF); // sets all the strands to flash a color
+  // LEDmanager.flash(0x00FFFF); // sets all the strands to flash a color
 }
