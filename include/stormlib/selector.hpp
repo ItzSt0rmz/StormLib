@@ -4,7 +4,6 @@
 #include "pros/adi.hpp"
 #include <string>
 
-
 namespace stormlib {
 /**
  * @brief selector class
