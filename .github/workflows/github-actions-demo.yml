@@ -1,0 +1,9 @@
+              - name: clang-format lint
+                uses: DoozyX/clang-format-lint-action@v0.18.2
+                
+              - name: PROS Build Action
+                uses: LemLib/pros-build@v2.0.2
+                
+              - name: Pros Depot from Releases
+                uses: LemLib/pros-depot@v0.1.0-beta.1
+            
