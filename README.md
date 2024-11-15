@@ -3,7 +3,10 @@ StormLib is a template built for PROS 4 that includes LED control and an auton s
 
 Have any questions or feature requests, join the discord: [https://discord.gg/vTmMG3dAX6](https://discord.gg/vTmMG3dAX6)
 
+<p align="center">
 <img src="https://img.shields.io/github/downloads/ItzSt0rmz/StormLib/total?style=for-the-badge">
+<img src="https://img.shields.io/github/actions/workflow/status/StormLib/StormLib/pros-build.yml?style=for-the-badge">
+</p>
 
 # LEDs
 
