@@ -29,7 +29,7 @@ public:
    * @param angularSettings settings for the angular controller
    * @param sensors sensors to be used for odometry
    */
-  void flow(u_int32_t color1, u_int32_t color2, int speed = 1);
+  void flow(uint32_t color1, uint32_t color2, int speed = 1);
 
   void rainbow(int speed = 1);
 
@@ -41,7 +41,7 @@ public:
    * @param angularSettings settings for the angular controller
    * @param sensors sensors to be used for odometry
    */
-  void flash(u_int32_t color, int speed = 5, u_int32_t color2 = 0x000000);
+  void flash(uint32_t color, int speed = 5, uint32_t color2 = 0x000000);
 
   /**
    * @brief Set the strand to "breathe" a color (i.e a slower, less harsh flash)
@@ -65,6 +65,8 @@ public:
 
   static std::vector<uint32_t> genRainbow(int length);
 
+  void pixelRun(uint32_t color, int length = 3, int speed = 5, uint32_t color2 = 0x000000);
+
   /**
    * @brief Turn off the RGB
    *
@@ -73,8 +75,6 @@ public:
   void off();
 
   void bufferShift();
-
-  void shiftRight(std::vector<u_int32_t> vec, int x);
 
   void setColor(uint32_t color);
 
@@ -101,7 +101,7 @@ public:
 
 private:
   int adiPort, length;
-  u_int32_t default_color, tempColor1, tempColor2;
+  uint32_t default_color, tempColor1, tempColor2;
   int speed, mode, shiftValue = 0;
 };
 
@@ -114,9 +114,9 @@ public:
   void updater();
 
   void rainbow(int speed = 5);
-  void flow(u_int32_t color1, u_int32_t color2, int speed = 1);
-  void flash(u_int32_t color, int speed = 5, u_int32_t color2 = 0x000000);
-  void setColor(u_int32_t color);
+  void flow(uint32_t color1, uint32_t color2, int speed = 1);
+  void flash(uint32_t color, int speed = 5, uint32_t color2 = 0x000000);
+  void setColor(uint32_t color);
   void off();
 
 private:

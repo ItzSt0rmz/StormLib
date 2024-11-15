@@ -5,10 +5,11 @@
 #include "pros/rtos.hpp"
 #include "stormlib/led.hpp"
 
-stormlib::aRGB strand1(5, 41);
-stormlib::aRGB strand2(6, 41);
-stormlib::aRGB strand3(7, 41);
-stormlib::aRGB strand4(8, 41);
+stormlib::aRGB strand1(4, 41);
+stormlib::aRGB strand2(5, 41);
+stormlib::aRGB strand3(6, 41);
+stormlib::aRGB strand4(7, 41);
+stormlib::aRGB strand5(8, 41);
 
 stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP",
                                  "5Ring", "Goal Rush", "Disrupt");
@@ -96,6 +97,7 @@ void opcontrol() {
                0xFFFF00);     // gradient between two colors flows down strand
   strand3.setColor(0x00FFFF); // strand stays on one color
   strand4.flash(0xFF0000);
+  strand5.pixelRun(0xFF0000);
 
   driverClock.waitUntil(90 * 1000);
 

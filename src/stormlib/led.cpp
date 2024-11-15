@@ -71,7 +71,7 @@ void stormlib::aRGB::off() {
   buffer.resize(length, 0x00000F);
 }
 
-void stormlib::aRGB::setColor(u_int32_t color) {
+void stormlib::aRGB::setColor(uint32_t color) {
   shiftValue = 0;
   buffer.clear();
   buffer.resize(length, color);
@@ -82,8 +82,8 @@ void stormlib::aRGB::setColor(u_int32_t color) {
  *
  * @param
  */
-void stormlib::aRGB::flow(u_int32_t color1, u_int32_t color2, int speed) {
-  shiftValue = 1 * speed;
+void stormlib::aRGB::flow(uint32_t color1, uint32_t color2, int speed) {
+  shiftValue = speed;
   buffer = genGradient(color1, color2, length);
 }
 
@@ -92,7 +92,7 @@ void stormlib::aRGB::flow(u_int32_t color1, u_int32_t color2, int speed) {
  *
  * @param
  */
-void stormlib::aRGB::flash(u_int32_t color, int speed, u_int32_t color2) {
+void stormlib::aRGB::flash(uint32_t color, int speed, uint32_t color2) {
   shiftValue = length;
   buffer.clear();
   buffer.resize(length, color);
@@ -107,7 +107,7 @@ void stormlib::aRGB::flash(u_int32_t color, int speed, u_int32_t color2) {
 void stormlib::aRGB::breathe(uint32_t color) {}
 
 void stormlib::aRGB::rainbow(int speed) {
-  shiftValue = 1 * speed;
+  shiftValue = speed;
   buffer = genRainbow(length);
 }
 
@@ -155,6 +155,15 @@ std::vector<uint32_t> stormlib::aRGB::genRainbow(int length) {
   }
 
   return rainbowColors;
+}
+
+void stormlib::aRGB::pixelRun(uint32_t color, int run_length, int speed, uint32_t color2) {
+  buffer.clear();
+  buffer.resize(length, color2);
+  for (int i = 0; i < length; i++) {
+    buffer[i] = color;
+  }
+  shiftValue = speed;
 }
 
 void stormlib::aRGB::bufferShift() {
@@ -235,7 +244,7 @@ void stormlib::aRGB_manager::off() {
   }
 }
 
-void stormlib::aRGB_manager::setColor(u_int32_t color) {
+void stormlib::aRGB_manager::setColor(uint32_t color) {
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
       strands[i]->setColor(color);
@@ -243,8 +252,8 @@ void stormlib::aRGB_manager::setColor(u_int32_t color) {
   }
 }
 
-void stormlib::aRGB_manager::flash(u_int32_t color, int speed,
-                                   u_int32_t color2) {
+void stormlib::aRGB_manager::flash(uint32_t color, int speed,
+                                   uint32_t color2) {
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
       strands[i]->flash(color, speed, color2);
@@ -252,7 +261,7 @@ void stormlib::aRGB_manager::flash(u_int32_t color, int speed,
   }
 }
 
-void stormlib::aRGB_manager::flow(u_int32_t color1, u_int32_t color2,
+void stormlib::aRGB_manager::flow(uint32_t color1, uint32_t color2,
                                   int speed) {
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
