@@ -54,20 +54,6 @@ public:
   void breathe(uint32_t color);
 
   /**
-   * @brief Convert a hex color code to a hexadecimal code
-   *
-   * @param hex Hex color code to be converted
-   */
-  static uint32_t hexToDec(const std::string &hex);
-
-  /**
-   * @brief Convert a hexadecimal color code to a hex code
-   *
-   * @param hex Hexadecimal color code to be converted
-   */
-  static std::string decToHex(uint32_t dec);
-
-  /**
    * @brief Generate a gradient of colors between two given colors
    *
    * @param color1 First color bound

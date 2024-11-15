@@ -13,30 +13,6 @@
 std::vector<pros::adi::Led> stormlib::aRGB::leds;
 
 /**
- * @brief Convert a hex color code to a hexadecimal code
- *
- * @param hex Hex color code to be converted
- */
-uint32_t stormlib::aRGB::hexToDec(const std::string &hex) {
-  std::stringstream ss;
-  ss << std::hex << hex;
-  uint32_t dec;
-  ss >> dec;
-  return dec;
-}
-
-/**
- * @brief Convert a hexadecimal color code to a hex code
- *
- * @param hex Hexadecimal color code to be converted
- */
-std::string stormlib::aRGB::decToHex(uint32_t dec) {
-  std::stringstream ss;
-  ss << std::hex << std::setw(8) << std::setfill('0') << dec;
-  return ss.str();
-}
-
-/**
  * @brief Generate a gradient of colors between two given colors
  *
  * @param startColor First color bound
@@ -50,28 +26,23 @@ std::vector<uint32_t> stormlib::aRGB::genGradient(uint32_t startColor,
   std::vector<uint32_t> gradient;
   gradient.reserve(length);
 
-  // extract RGB components of startColor
   uint8_t startR = (startColor >> 16) & 0xFF;
   uint8_t startG = (startColor >> 8) & 0xFF;
   uint8_t startB = startColor & 0xFF;
 
-  // extract RGB components of endColor
   uint8_t endR = (endColor >> 16) & 0xFF;
   uint8_t endG = (endColor >> 8) & 0xFF;
   uint8_t endB = endColor & 0xFF;
 
-  // calculate the step size for each color component
   double stepR = static_cast<double>(endR - startR) / (length - 1);
   double stepG = static_cast<double>(endG - startG) / (length - 1);
   double stepB = static_cast<double>(endB - startB) / (length - 1);
 
-  // generate the gradient
   for (size_t i = 0; i < length; ++i) {
     uint8_t r = static_cast<uint8_t>(startR + (stepR * i));
     uint8_t g = static_cast<uint8_t>(startG + (stepG * i));
     uint8_t b = static_cast<uint8_t>(startB + (stepB * i));
 
-    // Combine the RGB components into a single uint32_t color
     uint32_t color = (r << 16) | (g << 8) | b;
     gradient.push_back(color);
   }
