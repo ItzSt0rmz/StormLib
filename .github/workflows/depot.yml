@@ -1,4 +1,4 @@
-name: Populate Depot json
+name: pros-depot
 
 on: 
   # runs when this repository's releases are modified
