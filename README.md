@@ -43,7 +43,7 @@ Then fed into the manager, constructed as:
 );`
 <br>
 <br>
-Finally, to initalize your LEDs, run `LEDmanager.initialize();` in initialize()
+Finally, to initalize your LEDs, run `LEDmanager.initialize(int refreshRate);` in initialize(). The refresh rate of the leds can now be modified in this function, but the default is 20. In general, lower is better looking, but uses more resources.
 <br>
 <br>
 Now, individual strands or the manager as a whole can take the following commands:
