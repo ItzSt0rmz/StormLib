@@ -32,7 +32,7 @@ LEDs are constructed as:
 Then fed into the manager, constructed as:
 <br>
 `stormlib::aRGB_manager LEDmanager(
-	&strand1,
+	&name,
 	&strand2,
 	&strand3,
 	nullptr,
