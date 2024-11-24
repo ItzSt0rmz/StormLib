@@ -27,7 +27,9 @@ void autonLeft1() {}
  */
 void initialize() {
   autonSelector.initialize();
-  LEDmanager.initialize();
+  LEDmanager.initialize(20); // LEDs will initialize green, you can change the
+                             // refresh rate of the strands, fasster = better,
+                             // but more resource usage
 }
 
 /**
@@ -88,20 +90,19 @@ void opcontrol() {
 
   driverClock.start();
 
+  LEDmanager.rainbow(); // rainbow flows down all the strands
   driverClock.waitUntil(100 * 1000);
 
   autonSelector.loadSaveScreen(); // loads the save screen
 
-  strand1.rainbow(); // rainbow flows down strand
+  strand1.rainbow(10); // rainbow flows down strand
   strand2.flow(0x00FFFF,
                0xFFFF00);     // gradient between two colors flows down strand
   strand3.setColor(0x00FFFF); // strand stays on one color
-  strand4.flash(0xFF0000);
-  strand5.pixelRun(0xFF0000);
+  strand4.flash(0xFF0000);    // flashes a color
+  strand5.pulse(0xFF0000);    // sends a pulse down the strand repeatedly
 
   driverClock.waitUntil(90 * 1000);
 
-  LEDmanager.rainbow();
-
-  // LEDmanager.flash(0x00FFFF); // sets all the strands to flash a color
+  LEDmanager.off(); // turns off all the strands
 }

@@ -157,10 +157,11 @@ std::vector<uint32_t> stormlib::aRGB::genRainbow(int length) {
   return rainbowColors;
 }
 
-void stormlib::aRGB::pixelRun(uint32_t color, int run_length, int speed, uint32_t color2) {
+void stormlib::aRGB::pulse(uint32_t color, int run_length, int speed,
+                           uint32_t color2) {
   buffer.clear();
   buffer.resize(length, color2);
-  for (int i = 0; i < length; i++) {
+  for (int i = 0; i < run_length; i++) {
     buffer[i] = color;
   }
   shiftValue = speed;
@@ -212,12 +213,13 @@ void stormlib::aRGB_manager::updater() {
       strands[i]->bufferShift();
       strands[i]->update();
 
-      pros::delay(20);
+      pros::delay(refreshRate);
     }
   }
 }
 
-void stormlib::aRGB_manager::initialize() {
+void stormlib::aRGB_manager::initialize(int refreshRate) {
+  this->refreshRate = refreshRate;
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
       strands[i]->setColor(0x00ff00);
@@ -252,8 +254,7 @@ void stormlib::aRGB_manager::setColor(uint32_t color) {
   }
 }
 
-void stormlib::aRGB_manager::flash(uint32_t color, int speed,
-                                   uint32_t color2) {
+void stormlib::aRGB_manager::flash(uint32_t color, int speed, uint32_t color2) {
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
       strands[i]->flash(color, speed, color2);
@@ -261,11 +262,19 @@ void stormlib::aRGB_manager::flash(uint32_t color, int speed,
   }
 }
 
-void stormlib::aRGB_manager::flow(uint32_t color1, uint32_t color2,
-                                  int speed) {
+void stormlib::aRGB_manager::flow(uint32_t color1, uint32_t color2, int speed) {
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
       strands[i]->flow(color1, color2, speed);
+    }
+  }
+}
+
+void stormlib::aRGB_manager::pulse(uint32_t color, int length, int speed,
+                                   uint32_t color2) {
+  for (int i = 0; i < strands.size(); i++) {
+    if (strands[i] != nullptr) {
+      strands[i]->pulse(color, length, speed, color2);
     }
   }
 }

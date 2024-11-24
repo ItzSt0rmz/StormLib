@@ -29,7 +29,7 @@ public:
    * @param angularSettings settings for the angular controller
    * @param sensors sensors to be used for odometry
    */
-  void flow(uint32_t color1, uint32_t color2, int speed = 1);
+  void flow(uint32_t color1, uint32_t color2 = 0xffffff, int speed = 1);
 
   void rainbow(int speed = 1);
 
@@ -65,7 +65,8 @@ public:
 
   static std::vector<uint32_t> genRainbow(int length);
 
-  void pixelRun(uint32_t color, int length = 3, int speed = 5, uint32_t color2 = 0x000000);
+  void pulse(uint32_t color, int length = 3, int speed = 5,
+             uint32_t color2 = 0x000000);
 
   /**
    * @brief Turn off the RGB
@@ -110,18 +111,21 @@ class aRGB_manager {
 public:
   aRGB_manager(aRGB *strand1, aRGB *strand2, aRGB *strand3, aRGB *strand4,
                aRGB *strand5, aRGB *strand6, aRGB *strand7, aRGB *strand8);
-  void initialize();
+  void initialize(int refreshRate = 20);
   void updater();
 
   void rainbow(int speed = 5);
-  void flow(uint32_t color1, uint32_t color2, int speed = 1);
+  void flow(uint32_t color1, uint32_t color2 = 0xffffff, int speed = 1);
   void flash(uint32_t color, int speed = 5, uint32_t color2 = 0x000000);
   void setColor(uint32_t color);
+  void pulse(uint32_t color, int length = 3, int speed = 5,
+             uint32_t color2 = 0xffffff);
   void off();
 
 private:
   aRGB *strand1, *strand2, *strand3, *strand4, *strand5, *strand6, *strand7,
       *strand8;
   std::vector<aRGB *> strands;
+  int refreshRate;
 };
 } // namespace stormlib
