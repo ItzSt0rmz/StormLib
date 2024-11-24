@@ -5,7 +5,6 @@ Have any questions or feature requests, join the discord: [https://discord.gg/vT
 
 <p align="center">
 <img src="https://img.shields.io/github/downloads/ItzSt0rmz/StormLib/total?style=for-the-badge">
-<img src="https://img.shields.io/github/actions/workflow/status/StormLib/StormLib/pros-build.yml?style=for-the-badge">
 </p>
 
 # LEDs
