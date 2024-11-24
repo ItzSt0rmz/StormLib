@@ -66,7 +66,7 @@ public:
   static std::vector<uint32_t> genRainbow(int length);
 
   void pulse(uint32_t color, int length = 3, int speed = 5,
-             uint32_t color2 = 0x000000);
+             uint32_t color2 = 0x00000f);
 
   /**
    * @brief Turn off the RGB
