@@ -32,7 +32,7 @@ LEDs are constructed as:
 Then fed into the manager, constructed as:
 <br>
 `stormlib::aRGB_manager LEDmanager(
-	&strand1,
+	&name,
 	&strand2,
 	&strand3,
 	nullptr,
@@ -43,15 +43,16 @@ Then fed into the manager, constructed as:
 );`
 <br>
 <br>
-Finally, to initalize your LEDs, run `LEDmanager.initialize();` in initialize()
+Finally, to initalize your LEDs, run `LEDmanager.initialize(int refreshRate);` in initialize(). The refresh rate of the leds can now be modified in this function, but the default is 20. In general, lower is better looking, but uses more resources.
 <br>
 <br>
 Now, individual strands or the manager as a whole can take the following commands:
 <br>
-* `set_color()` - sets the strand(s) a color
-* `flow()` - sets the strand(s) to cycle a gradient between two colors
-* `rainbow()` - sets the strand(s) to cycle a rainbow
-* `flash()` - sets the strand(s) to flash a color or flash between two colors
+* `set_color(uint32_t color)` - sets the strand(s) a color
+* `flow(uint32_t color1, uint32_t color2, int speed)` - sets the strand(s) to cycle a gradient between two colors
+* `rainbow(int speed)` - sets the strand(s) to cycle a rainbow
+* `flash(uint32_t color1, int speed, uint32_t color2)` - sets the strand(s) to flash a color or flash between two colors
+* `pulse(uint32_t color, int length, int speed, uint32_t color2)` - sends a pulse down the strand(s)
 * `off()` - turns off the strand(s)
 
 # Auton Selector
@@ -71,6 +72,26 @@ In autonomous(), autons are assigned to slots as following:
 A default auton can be set using the form:
 <br>
 `if (autonSelector.getAuton() == 0) {function here};`
+
+# Clock
+A clock is initialized as:
+<br>
+`stormlib::clock driverClock;`
+<br>
+<br>
+Then, to start it, run `driverClock.start(time_in_seconds * 100);` It is default 1:45 (i.e. opcontrol period) if you leave the parameter blank.
+<br>
+<br>
+Once the clock is started, you can now access how much time is left via:
+<br>
+<br>
+`driverClock.timeLeft()`
+<br>
+<br>
+Or delay until a certain time, which is useful for tasks dependent on the game clock:
+<br>
+<br>
+`driverClock.waitUntil(time_in_seconds * 1000);`
 
 # Contributing
 If you want to see a feature, feel free to open a pull request!
