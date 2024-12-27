@@ -8,6 +8,7 @@ Have any questions or feature requests, join the discord: [https://discord.gg/vT
 </p>
 
 # LEDs
+![LED example](https://media.discordapp.net/attachments/1020441457456332812/1317545979397935124/IMG_7194.jpg?ex=67703750&is=676ee5d0&hm=3654e877034d556db1eb7c9a600e07c6870b67440ded6bacd80f31ef97f68a63&=&format=webp&width=895&height=671)
 
 ## Hardware
 > **Note**: You will need to be able to solder to make LED strips work with the brain.
@@ -55,6 +56,8 @@ Now, individual strands or the manager as a whole can take the following command
 * `off()` - turns off the strand(s)
 
 # Auton Selector
+![auton selector example](https://cdn.discordapp.com/attachments/1306103998964830219/1309345645605158932/image.png?ex=67700be8&is=676eba68&hm=775d69591eb8014e351f938c0495d2ca2909539855fa5561926bd7d33a44b2a5&)
+
 The auton selector is constructed as:
 <br>
 `stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "slot1Name", "slot2Name", "slot3Name", "slot4Name");`
