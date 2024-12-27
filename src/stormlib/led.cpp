@@ -53,12 +53,17 @@ std::vector<uint32_t> stormlib::aRGB::genGradient(uint32_t startColor,
 /**
  * @brief Construct a new aRGB strand
  *
- * @param LED_strip LED object to be used for strand
- * @param default_color default color for the strand to show if not given an
+ * @param adiPort the number or letter of the adi port that the strand is
+ * attached to
+ * @param length the number of diodes on the led strand
  * argument
  */
-stormlib::aRGB::aRGB(int adiPort, int length)
-    : adiPort(adiPort), length(length) {}
+stormlib::aRGB::aRGB(int adiPort, int length) {
+  if (length > 63)
+    length = 63;
+  this->adiPort = adiPort;
+  this->length = length;
+}
 
 /**
  * @brief Turn off the RGB

@@ -593,7 +593,7 @@ void stormlib::selector::initialize() {
   //       number into it for the save screen
 
   saveExit = lv_btn_create(
-      saveScreen); // create button, lv_scr_act() is deafult screen object
+      saveScreen); // create button, lv_scr_act() is default screen object
   lv_obj_add_event_cb(saveExit, autonsMenu_btn_click_action, LV_EVENT_CLICKED,
                       NULL); // set function to be called on button click
   lv_obj_add_style(saveExit, &invisibleStyle, LV_PART_MAIN);
