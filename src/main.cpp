@@ -17,7 +17,7 @@ stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP",
                                  "5Ring", "Goal Rush", "Disrupt");
 
 stormlib::aRGB_manager LEDmanager(&strand1, &strand2, &strand3, &strand4,
-                                  nullptr, nullptr, nullptr, nullptr);
+                                  &strand5, &strand6, nullptr, nullptr);
 
 void autonLeft1() {}
 
