@@ -53,12 +53,17 @@ std::vector<uint32_t> stormlib::aRGB::genGradient(uint32_t startColor,
 /**
  * @brief Construct a new aRGB strand
  *
- * @param LED_strip LED object to be used for strand
- * @param default_color default color for the strand to show if not given an
+ * @param adiPort the number or letter of the adi port that the strand is
+ * attached to
+ * @param length the number of diodes on the led strand
  * argument
  */
-stormlib::aRGB::aRGB(int adiPort, int length)
-    : adiPort(adiPort), length(length) {}
+stormlib::aRGB::aRGB(int adiPort, int length) {
+  if (length > 63)
+    length = 63;
+  this->adiPort = adiPort;
+  this->length = length;
+}
 
 /**
  * @brief Turn off the RGB
@@ -157,7 +162,8 @@ std::vector<uint32_t> stormlib::aRGB::genRainbow(int length) {
   return rainbowColors;
 }
 
-void stormlib::aRGB::pixelRun(uint32_t color, int run_length, int speed, uint32_t color2) {
+void stormlib::aRGB::pulse(uint32_t color, int run_length, int speed,
+                           uint32_t color2) {
   buffer.clear();
   buffer.resize(length, color2);
   for (int i = 0; i < run_length; i++) {
@@ -212,12 +218,13 @@ void stormlib::aRGB_manager::updater() {
       strands[i]->bufferShift();
       strands[i]->update();
 
-      pros::delay(20);
+      pros::delay(refreshRate);
     }
   }
 }
 
-void stormlib::aRGB_manager::initialize() {
+void stormlib::aRGB_manager::initialize(int refreshRate) {
+  this->refreshRate = refreshRate;
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
       strands[i]->setColor(0x00ff00);
@@ -252,8 +259,7 @@ void stormlib::aRGB_manager::setColor(uint32_t color) {
   }
 }
 
-void stormlib::aRGB_manager::flash(uint32_t color, int speed,
-                                   uint32_t color2) {
+void stormlib::aRGB_manager::flash(uint32_t color, int speed, uint32_t color2) {
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
       strands[i]->flash(color, speed, color2);
@@ -261,8 +267,7 @@ void stormlib::aRGB_manager::flash(uint32_t color, int speed,
   }
 }
 
-void stormlib::aRGB_manager::flow(uint32_t color1, uint32_t color2,
-                                  int speed) {
+void stormlib::aRGB_manager::flow(uint32_t color1, uint32_t color2, int speed) {
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
       strands[i]->flow(color1, color2, speed);
@@ -270,10 +275,18 @@ void stormlib::aRGB_manager::flow(uint32_t color1, uint32_t color2,
   }
 }
 
+<<<<<<< HEAD
 void stormlib::aRGB_manager::pixelRun(uint32_t color, int run_length, int speed, uint32_t color2) {
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
       strands[i]->pixelRun(color, run_length, speed, color2);
+=======
+void stormlib::aRGB_manager::pulse(uint32_t color, int length, int speed,
+                                   uint32_t color2) {
+  for (int i = 0; i < strands.size(); i++) {
+    if (strands[i] != nullptr) {
+      strands[i]->pulse(color, length, speed, color2);
+>>>>>>> 360302a520c9658d7ac53efdc711401727412a45
     }
   }
 }
