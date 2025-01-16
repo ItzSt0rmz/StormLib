@@ -96,7 +96,7 @@ void stormlib::aRGB::flash(uint32_t color, int speed, uint32_t color2) {
   shiftValue = length;
   buffer.clear();
   buffer.resize(length, color);
-  buffer.resize(length * speed * 2, 0x00000F);
+  buffer.resize(length * speed * 2, color2);
 };
 
 /**
@@ -160,7 +160,7 @@ std::vector<uint32_t> stormlib::aRGB::genRainbow(int length) {
 void stormlib::aRGB::pixelRun(uint32_t color, int run_length, int speed, uint32_t color2) {
   buffer.clear();
   buffer.resize(length, color2);
-  for (int i = 0; i < length; i++) {
+  for (int i = 0; i < run_length; i++) {
     buffer[i] = color;
   }
   shiftValue = speed;
@@ -266,6 +266,14 @@ void stormlib::aRGB_manager::flow(uint32_t color1, uint32_t color2,
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
       strands[i]->flow(color1, color2, speed);
+    }
+  }
+}
+
+void stormlib::aRGB_manager::pixelRun(uint32_t color, int run_length, int speed, uint32_t color2) {
+  for (int i = 0; i < strands.size(); i++) {
+    if (strands[i] != nullptr) {
+      strands[i]->pixelRun(color, run_length, speed, color2);
     }
   }
 }
