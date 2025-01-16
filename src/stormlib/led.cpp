@@ -65,6 +65,14 @@ stormlib::aRGB::aRGB(int adiPort, int length) {
   this->length = length;
 }
 
+stormlib::aRGB::aRGB(int smartPort, int expanderPort, int length) {
+  if (length > 63)
+    length = 63;
+  this->adiPort = smartPort;
+  this->expanderPort = expanderPort;
+  this->length = length;
+}
+
 /**
  * @brief Turn off the RGB
  *
@@ -193,7 +201,11 @@ void stormlib::aRGB::checkLeds() {
 
 void stormlib::aRGB::init() {
   id = leds.size();
-  leds.emplace_back(adiPort, length);
+  pros::adi::ext_adi_port_pair_t port_pair = {adiPort, expanderPort};
+
+  if (expanderPort = 0) leds.emplace_back(adiPort, length);
+  else leds.emplace_back(port_pair, length);
+
   buffer.resize(length, 0xFFFFFF);
 }
 
@@ -275,18 +287,11 @@ void stormlib::aRGB_manager::flow(uint32_t color1, uint32_t color2, int speed) {
   }
 }
 
-<<<<<<< HEAD
-void stormlib::aRGB_manager::pixelRun(uint32_t color, int run_length, int speed, uint32_t color2) {
-  for (int i = 0; i < strands.size(); i++) {
-    if (strands[i] != nullptr) {
-      strands[i]->pixelRun(color, run_length, speed, color2);
-=======
 void stormlib::aRGB_manager::pulse(uint32_t color, int length, int speed,
                                    uint32_t color2) {
   for (int i = 0; i < strands.size(); i++) {
     if (strands[i] != nullptr) {
       strands[i]->pulse(color, length, speed, color2);
->>>>>>> 360302a520c9658d7ac53efdc711401727412a45
     }
   }
 }

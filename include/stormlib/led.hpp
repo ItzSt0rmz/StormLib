@@ -21,6 +21,8 @@ public:
    */
   aRGB(int adiPort, int length);
 
+  aRGB(int smartPort, int expanderPort, int length);
+
   /**
    * @brief Set the strand to flow from a color to another color
    *
@@ -102,6 +104,7 @@ public:
 
 private:
   int adiPort, length;
+  int expanderPort = 0;
   uint32_t default_color, tempColor1, tempColor2;
   int speed, mode, shiftValue = 0;
 };

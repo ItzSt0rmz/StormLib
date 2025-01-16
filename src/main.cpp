@@ -5,11 +5,13 @@
 #include "pros/rtos.hpp"
 #include "stormlib/led.hpp"
 
-stormlib::aRGB strand1(4, 41);
-stormlib::aRGB strand2(5, 41);
+stormlib::aRGB strand1(4, 15);
+stormlib::aRGB strand2(5, 20);
 stormlib::aRGB strand3(6, 41);
 stormlib::aRGB strand4(7, 41);
-stormlib::aRGB strand5(8, 41);
+stormlib::aRGB strand5(8, 63);
+
+stormlib::aRGB strand6(5, 1, 30); // adi expander on smart port 5, in slot 1
 
 stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP",
                                  "5Ring", "Goal Rush", "Disrupt");
@@ -103,6 +105,8 @@ void opcontrol() {
   strand5.pulse(0xFF0000);    // sends a pulse down the strand repeatedly
 
   driverClock.waitUntil(90 * 1000);
+
+  strand6.rainbow();
 
   LEDmanager.off(); // turns off all the strands
 }
