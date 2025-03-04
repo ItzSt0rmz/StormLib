@@ -1,25 +1,20 @@
 #include "main.h"
-#include "liblvgl/core/lv_disp.h"
-#include "liblvgl/core/lv_obj_pos.h"
-#include "liblvgl/widgets/lv_img.h"
-#include "pros/rtos.hpp"
-#include "stormlib/led.hpp"
 
-stormlib::aRGB strand1(4, 15);
-stormlib::aRGB strand2(5, 20);
-stormlib::aRGB strand3(6, 41);
-stormlib::aRGB strand4(7, 41);
-stormlib::aRGB strand5(8, 63);
-
-stormlib::aRGB strand6(5, 1, 30); // adi expander on smart port 5, in slot 1
-
-stormlib::selector autonSelector(stormlib::selector::E_BLUE_RIGHT_4, "AWP",
-                                 "5Ring", "Goal Rush", "Disrupt");
-
-stormlib::aRGB_manager LEDmanager(&strand1, &strand2, &strand3, &strand4,
-                                  &strand5, &strand6, nullptr, nullptr);
-
-void autonLeft1() {}
+/**
+ * A callback function for LLEMU's center button.
+ *
+ * When this callback is fired, it will toggle line 2 of the LCD text between
+ * "I was pressed!" and nothing.
+ */
+void on_center_button() {
+	static bool pressed = false;
+	pressed = !pressed;
+	if (pressed) {
+		pros::lcd::set_text(2, "I was pressed!");
+	} else {
+		pros::lcd::clear_line(2);
+	}
+}
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -28,10 +23,10 @@ void autonLeft1() {}
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-  autonSelector.initialize();
-  LEDmanager.initialize(20); // LEDs will initialize green, you can change the
-                             // refresh rate of the strands, fasster = better,
-                             // but more resource usage
+	pros::lcd::initialize();
+	pros::lcd::set_text(1, "Hello PROS User!");
+
+	pros::lcd::register_btn1_cb(on_center_button);
 }
 
 /**
@@ -63,15 +58,7 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {
-  if (autonSelector.getAuton() == 0)
-    autonLeft1(); // put default auton here
-
-  // register autons - if (autonSelector.getAuton() == ENUMERATED SLOT VALUE)
-  // {function here}
-  if (autonSelector.getAuton() == stormlib::selector::E_BLUE_LEFT_1)
-    autonLeft1();
-}
+void autonomous() {}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -87,26 +74,21 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	pros::Controller master(pros::E_CONTROLLER_MASTER);
+	pros::MotorGroup left_mg({1, -2, 3});    // Creates a motor group with forwards ports 1 & 3 and reversed port 2
+	pros::MotorGroup right_mg({-4, 5, -6});  // Creates a motor group with forwards port 5 and reversed ports 4 & 6
 
-  stormlib::clock driverClock;
 
-  driverClock.start();
+	while (true) {
+		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
+		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
+		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);  // Prints status of the emulated screen LCDs
 
-  LEDmanager.rainbow(); // rainbow flows down all the strands
-  driverClock.waitUntil(100 * 1000);
-
-  autonSelector.loadSaveScreen(); // loads the save screen
-
-  strand1.rainbow(10); // rainbow flows down strand
-  strand2.flow(0x00FFFF,
-               0xFFFF00);     // gradient between two colors flows down strand
-  strand3.setColor(0x00FFFF); // strand stays on one color
-  strand4.flash(0xFF0000);    // flashes a color
-  strand5.pulse(0xFF0000);    // sends a pulse down the strand repeatedly
-
-  driverClock.waitUntil(90 * 1000);
-
-  strand6.rainbow();
-
-  LEDmanager.off(); // turns off all the strands
+		// Arcade control scheme
+		int dir = master.get_analog(ANALOG_LEFT_Y);    // Gets amount forward/backward from left joystick
+		int turn = master.get_analog(ANALOG_RIGHT_X);  // Gets the turn left/right from right joystick
+		left_mg.move(dir - turn);                      // Sets left motor voltage
+		right_mg.move(dir + turn);                     // Sets right motor voltage
+		pros::delay(20);                               // Run for 20 ms then update
+	}
 }
